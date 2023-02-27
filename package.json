@@ -70,5 +70,9 @@
         "babel-plugin-named-exports-order": "^0.0.2",
         "prop-types": "^15.8.1",
         "webpack": "^5.74.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ianneo97/component-library.git"
     }
 }
