@@ -1,7 +1,9 @@
 {
-    "name": "component-library",
-    "version": "0.1.0",
-    "private": true,
+    "name": "@ianneo/component-library",
+    "version": "0.1.1",
+    "main": "build/index.cjs.js",
+    "module": "build/index.esm.js",
+    "types": "build/index.d.ts",
     "dependencies": {
         "@testing-library/jest-dom": "^5.16.5",
         "@testing-library/react": "^13.4.0",

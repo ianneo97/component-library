@@ -1,19 +1,23 @@
-// import { ReactNode } from "react";
-
-// interface ButtonProps {
-//     children: ReactNode;
-// }
-
-// const Table = ({ children, ...props }: ButtonProps) => (
-//     <button {...props}>{children}</button>
-// );
-
-// export { Table };
-// export type { ButtonProps };
 import { Table as AntdTable } from "antd";
+import { ColumnsType, TablePaginationConfig } from "antd/es/table";
 
-const Table = () => {
-    return <AntdTable dataSource={[]} columns={[]} />;
+export interface TableProps<T = any> {
+    data: T[];
+    columns: ColumnsType<T>;
+    rowKey: string;
+    paginationConfig?: TablePaginationConfig;
+}
+
+const Table: React.FC<TableProps> = (props) => {
+    return (
+        <AntdTable
+            dataSource={props.data}
+            columns={props.columns}
+            scroll={{ x: "max-content" }}
+            pagination={props.paginationConfig}
+            rowKey={props.rowKey}
+        />
+    );
 };
 
 export { Table };

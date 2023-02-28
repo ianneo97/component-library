@@ -6,4 +6,16 @@ export default {
     component: Table,
 };
 
-export const Default = () => <Table />;
+const mockData = [
+    { id: 1, name: "John", age: 20 },
+    { id: 2, name: "Jane", age: 21 },
+];
+
+const mockColumns = [
+    { title: "ID", dataIndex: "id" },
+    { title: "Name", dataIndex: "name" },
+];
+
+export const Default = () => (
+    <Table data={mockData} columns={mockColumns} rowKey="id" />
+);
