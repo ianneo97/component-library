@@ -1,4 +1,11 @@
-import { Col, Form as AntdForm, FormInstance, Row, Typography } from "antd";
+import {
+    Col,
+    Form as AntdForm,
+    FormInstance,
+    Row,
+    Typography,
+    ColProps,
+} from "antd";
 import { RuleObject } from "antd/es/form";
 import "./form.css";
 
@@ -10,19 +17,24 @@ export interface FormItemProps {
     dependencies?: string[]; // Form item dependencies
 }
 
+export interface WrapperProps {}
+
 export interface FormProps<T = any> {
     form: FormInstance<T>; // Initial form instance
-    items: FormItemProps[]; // Form items that need to be rendered
+    items?: FormItemProps[]; // Form items that need to be rendered
     className?: string; // Form class name
-    children?: React.ReactNode; // Form children
+    children?: React.ReactNode[]; // Form children
     split?: boolean; // Whether to split the form
+    labelProps?: ColProps;
+    wrapperProps?: ColProps;
 }
 
-function chunk(items: FormItemProps[], size: number) {
+function chunk(items: React.ReactNode[], size: number) {
+    const duplicatedArray = Object.assign([], items);
     const chunks = [];
 
-    while (items.length) {
-        chunks.push(items.splice(0, size));
+    while (duplicatedArray.length) {
+        chunks.push(duplicatedArray.splice(0, size));
     }
 
     return chunks;
@@ -33,13 +45,14 @@ function renderFormItem(item: FormItemProps) {
         <AntdForm.Item
             key={item.name}
             className="base-form-item"
+            style={{ width: "100%" }}
             hasFeedback
             dependencies={item.dependencies} // This will retrigger the rules on the dependencies value change
             label={
                 <Typography
                     style={{
-                        whiteSpace: "normal",
-                        wordBreak: "break-all",
+                        whiteSpace: "break-spaces",
+                        wordBreak: "break-word",
                     }}
                 >
                     {item.label}
@@ -59,27 +72,28 @@ const Form: React.FC<FormProps> = (props) => {
         <>
             <AntdForm
                 form={props.form}
-                className={`${props.className} base-form`}
-                labelCol={{ span: 5 }}
-                wrapperCol={{ span: 19 }}
+                className={`${props.className}`}
+                labelWrap={true}
+                labelCol={props.labelProps ?? { span: 5 }}
+                wrapperCol={props.wrapperProps ?? { span: 19 }}
                 scrollToFirstError={true}
+                validateTrigger="onBlur"
             >
                 {props.split ? (
                     <>
-                        {chunk(props.items, 2).map((formItems) => (
-                            <Row>
+                        {chunk(props?.children || [], 2).map((formItems) => (
+                            <Row gutter={16}>
                                 {formItems.map((item) => (
                                     <Col xs={24} sm={12} md={12}>
-                                        {renderFormItem(item)}
+                                        {item}
                                     </Col>
                                 ))}
                             </Row>
                         ))}
                     </>
                 ) : (
-                    props.items.map((item) => renderFormItem(item))
+                    props.children
                 )}
-                {props.children}
             </AntdForm>
         </>
     );
@@ -91,3 +105,4 @@ function useForm(): [FormInstance] {
 
 export { Form };
 export { useForm };
+export { renderFormItem };

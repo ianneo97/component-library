@@ -1,4 +1,11 @@
-/* .base-form {
-    padding: 12px
-} */
+/* .base-form-item {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    align-self: center
+}
 
+.base-form-item > * {
+    width: 100%;
+    float: left;
+} */

@@ -16,6 +16,10 @@ const mockColumns = [
     { title: "Name", dataIndex: "name" },
 ];
 
-export const Default = () => (
+export const TableWithData = () => (
     <Table data={mockData} columns={mockColumns} rowKey="id" />
+);
+
+export const EmptyTable = () => (
+    <Table data={[]} columns={mockColumns} rowKey="id" />
 );

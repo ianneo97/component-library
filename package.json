@@ -1,6 +1,6 @@
 {
     "name": "@ianneo/component-library",
-    "version": "0.1.2",
+    "version": "0.1.9",
     "main": "build/index.cjs.js",
     "module": "build/index.esm.js",
     "types": "build/index.d.ts",

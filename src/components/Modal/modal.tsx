@@ -2,7 +2,7 @@ import { ButtonProps, Modal as AntdModal } from "antd";
 
 export interface ModalProps {
     open: boolean;
-    title: string;
+    title?: string;
     okText?: string;
     okButtonProps?: ButtonProps;
     cancelText?: string;
