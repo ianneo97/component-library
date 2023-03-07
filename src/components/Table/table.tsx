@@ -1,6 +1,6 @@
 import { Table as AntdTable } from "antd";
 import { ColumnsType, TablePaginationConfig } from "antd/es/table";
-import { ExpandableConfig } from "antd/es/table/interface";
+import { ExpandableConfig, TableRowSelection } from "antd/es/table/interface";
 
 export interface TableProps<T = any> {
     data: T[];
@@ -9,13 +9,12 @@ export interface TableProps<T = any> {
     className?: string;
     paginationConfig?: TablePaginationConfig | false;
     expandable?: ExpandableConfig<T>;
-    title?: string;
+    rowSelection?: TableRowSelection<T>;
 }
 
 const Table: React.FC<TableProps> = (props) => {
     return (
         <AntdTable
-            title={() => props.title}
             dataSource={props.data}
             columns={props.columns}
             className={props.className}
@@ -23,13 +22,10 @@ const Table: React.FC<TableProps> = (props) => {
             pagination={props.paginationConfig}
             rowKey={props.rowKey}
             expandable={props.expandable}
+            rowSelection={props.rowSelection}
         />
     );
 };
 
-class ExecutorClass {
-    description: any;
-}
-
 export { Table };
-export { ExecutorClass };
+export type { TablePaginationConfig };

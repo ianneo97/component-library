@@ -7,7 +7,7 @@ export interface ModalProps {
     okButtonProps?: ButtonProps;
     cancelText?: string;
     children?: React.ReactNode;
-    width?: number;
+    width?: number | string;
     closeable?: boolean;
     submitFn: () => void;
     cancelFn: () => void;
@@ -25,7 +25,7 @@ const Modal: React.FC<ModalProps> = (props) => {
                 onOk={props.submitFn}
                 onCancel={props.cancelFn}
                 width={props.width}
-                closable={props.closeable}
+                closable={props.closeable || false}
             >
                 {props?.children}
             </AntdModal>

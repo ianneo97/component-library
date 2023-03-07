@@ -1,3 +1,2 @@
 export { Table } from "./table";
-export type { TableProps } from "./table";
-export { ExecutorClass } from "./table";
+export type { TableProps, TablePaginationConfig } from "./table";

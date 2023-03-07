@@ -20,7 +20,12 @@ export const UploadWithPictureCardType = () => {
 
     return (
         <>
-            <Upload type="picture-card" files={files} setFiles={setFiles}>
+            <Upload
+                type="picture-card"
+                showUploadList={false}
+                files={files}
+                setFiles={setFiles}
+            >
                 + Upload Now
             </Upload>
         </>

@@ -58,7 +58,7 @@ export const DefaultForm = () => {
     const items: FormItemProps[] = [
         { label: "Nameeeeeeeeeeeeeeeee", name: "name", children: <Input /> },
         {
-            label: "Age With Many Many Spaces ",
+            // label: "Age With Many Many Spaces ",
             name: "age",
             children: <Input />,
             rules: [{ required: true, message: "Age is required" }],

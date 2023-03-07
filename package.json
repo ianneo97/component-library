@@ -1,10 +1,11 @@
 {
     "name": "@ianneo/component-library",
-    "version": "0.1.9",
+    "version": "0.1.27",
     "main": "build/index.cjs.js",
     "module": "build/index.esm.js",
     "types": "build/index.d.ts",
     "dependencies": {
+        "@ant-design/icons": "^5.0.1",
         "@testing-library/jest-dom": "^5.16.5",
         "@testing-library/react": "^13.4.0",
         "@testing-library/user-event": "^13.5.0",
