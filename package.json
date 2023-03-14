@@ -1,6 +1,6 @@
 {
     "name": "@ianneo/component-library",
-    "version": "0.1.27",
+    "version": "0.1.32",
     "main": "build/index.cjs.js",
     "module": "build/index.esm.js",
     "types": "build/index.d.ts",
@@ -72,6 +72,8 @@
         "@storybook/testing-library": "^0.0.13",
         "babel-plugin-named-exports-order": "^0.0.2",
         "prop-types": "^15.8.1",
+        "sass": "^1.59.2",
+        "rollup-plugin-import-css": "^3.2.1",
         "webpack": "^5.74.0"
     },
     "repository": {

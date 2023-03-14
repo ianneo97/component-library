@@ -42,21 +42,18 @@ const Table: React.FC<TableProps> = (props) => {
     const onSearch = useCallback(() => {
         const content = column
             ? props.data.filter((item: any) =>
-                  item[column]
-                      .toString()
+                  JSON.stringify(item[column])
                       .toLocaleLowerCase()
                       .includes(filterValue.toLocaleLowerCase())
               )
             : props.data.filter((item) =>
                   Object.values(item).some((value) =>
-                      (value as string)
-                          .toString()
+                      JSON.stringify(value)
                           .toLocaleLowerCase()
                           .includes(filterValue.toLocaleLowerCase())
                   )
               );
 
-        console.log(content);
         setFilteredData(content);
     }, [column, filterValue, props.data]);
 
@@ -87,10 +84,15 @@ const Table: React.FC<TableProps> = (props) => {
                         <div className="flex-table-control-filter">
                             <Typography>Columns: </Typography>
                             <Select
-                                options={props.columns.map((column: any) => ({
-                                    label: column.title,
-                                    value: column.dataIndex,
-                                }))}
+                                options={props.columns
+                                    .filter(
+                                        (column: any) =>
+                                            column.dataIndex !== "actions"
+                                    )
+                                    .map((column: any) => ({
+                                        label: column.title,
+                                        value: column.dataIndex,
+                                    }))}
                                 onChange={(value) => setColumn(value as string)}
                             />
                         </div>

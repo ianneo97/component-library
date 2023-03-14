@@ -8,14 +8,30 @@ export default {
 };
 
 const mockData = [
-    { id: 1, name: "John", age: 20 },
-    { id: 2, name: "Ane", age: 22 },
+    {
+        id: 1,
+        name: {
+            locales: [{ text: "John", localeName: "en" }],
+        },
+        age: 20,
+    },
+    {
+        id: 2,
+        name: {
+            locales: [{ text: "Mary", localeName: "en" }],
+        },
+        age: 22,
+    },
 ];
 
 const mockColumns = [
     { title: "ID", dataIndex: "id" },
-    { title: "Name", dataIndex: "name" },
+    {
+        title: "Name",
+        render: (value: any) => value.name.locales[0].text,
+    },
     { title: "Age", dataIndex: "age" },
+    { title: "Actions", dataIndex: "actions" },
 ];
 
 export const TableWithData = () => (
@@ -25,7 +41,7 @@ export const TableWithData = () => (
         rowKey="id"
         actionContent={
             <>
-                <Button type="primary">Hi</Button>
+                <Button mode="create">Hi</Button>
             </>
         }
     />

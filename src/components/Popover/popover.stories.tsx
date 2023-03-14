@@ -18,7 +18,7 @@ export const Default = () => {
     return (
         <>
             <Popover content={content} title="Title" trigger="hover">
-                <Button>Hover me</Button>
+                <Button mode="comment">Hover me</Button>
             </Popover>
         </>
     );

@@ -1,0 +1,47 @@
+.lfx-btn {
+    border-radius: 34px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-weight: 400;
+    transition: transform 0.2s ease-in-out;
+}
+
+.lfx-create-btn,
+.lfx-create-btn:hover,
+.lfx-create-btn .ant-typography {
+    background-color: #972d47 !important;
+    color: #ffffff !important;
+}
+
+.lfx-delete-btn,
+.lfx-delete-btn:hover,
+.lfx-delete-btn .ant-typography {
+    border-color: #cc2424 !important;
+    color: #cc2424 !important;
+}
+
+.lfx-edit-btn,
+.lfx-edit-btn .ant-typography,
+.lfx-edit-btn:hover {
+    background-color: #3467e9 !important;
+    color: #ffffff !important;
+}
+
+.lfx-comment-btn,
+.lfx-comment-btn:hover,
+.lfx-comment-btn .ant-typography {
+    background-color: #303f49 !important;
+    color: #ffffff !important;
+}
+
+.lfx-create-btn:hover,
+.lfx-create-btn:focus,
+.lfx-delete-btn:hover,
+.lfx-delete-btn:focus,
+.lfx-edit-btn:hover,
+.lfx-edit-btn:focus,
+.lfx-comment-btn:hover,
+.lfx-comment-btn:focus {
+    transform: scale(1.05);
+}

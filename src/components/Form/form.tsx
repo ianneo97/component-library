@@ -8,7 +8,6 @@ import {
 } from "antd";
 import { RuleObject, FormListFieldData, FormListOperation } from "antd/es/form";
 import { ReactNode } from "react";
-import "./form.css";
 
 export interface FormItemProps {
     label?: string | null; // Form item label

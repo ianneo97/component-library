@@ -1,3 +1,10 @@
+import {
+    DeleteOutlined,
+    EditOutlined,
+    MessageOutlined,
+    UserAddOutlined,
+} from "@ant-design/icons";
+import { Typography } from "antd";
 import { Button } from "./button";
 
 export default {
@@ -7,32 +14,32 @@ export default {
 
 export const DefaultButton = () => {
     return (
-        <Button title="Test" type="primary">
-            Click Me!
-        </Button>
-    );
-};
+        <>
+            <Button mode="create">
+                <UserAddOutlined />
+                <Typography>Invite User</Typography>
+            </Button>
 
-export const DisabledButton = () => {
-    return (
-        <Button title="Test" type="primary" disabled>
-            Click Me!
-        </Button>
-    );
-};
+            <br />
 
-export const LoadingButton = () => {
-    return (
-        <Button type="primary" loading>
-            Click Me!
-        </Button>
-    );
-};
+            <Button mode="delete">
+                <DeleteOutlined />
+                <Typography>Delete User</Typography>
+            </Button>
 
-export const DangerButton = () => {
-    return (
-        <Button title="Test" type="primary" danger>
-            Click Me!
-        </Button>
+            <br />
+
+            <Button mode="edit">
+                <EditOutlined />
+                <Typography>Edit User</Typography>
+            </Button>
+
+            <br />
+
+            <Button mode="comment">
+                <MessageOutlined />
+                <Typography>Add Comment</Typography>
+            </Button>
+        </>
     );
 };

@@ -10,3 +10,4 @@ export * from "./Row";
 export * from "./Progress";
 export * from "./Typography";
 export * from "./Popover";
+export * from "./Radio";
