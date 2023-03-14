@@ -8,3 +8,5 @@ export * from "./Select";
 export * from "./Button";
 export * from "./Row";
 export * from "./Progress";
+export * from "./Typography";
+export * from "./Popover";

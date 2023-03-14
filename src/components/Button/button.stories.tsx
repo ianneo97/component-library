@@ -23,7 +23,7 @@ export const DisabledButton = () => {
 
 export const LoadingButton = () => {
     return (
-        <Button title="Test" type="primary" loading>
+        <Button type="primary" loading>
             Click Me!
         </Button>
     );

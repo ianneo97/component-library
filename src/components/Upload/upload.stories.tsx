@@ -21,7 +21,7 @@ export const UploadWithPictureCardType = () => {
     return (
         <>
             <Upload
-                type="picture-card"
+                listType="picture-card"
                 showUploadList={false}
                 files={files}
                 setFiles={setFiles}

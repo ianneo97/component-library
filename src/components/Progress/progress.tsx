@@ -1,9 +1,12 @@
-import { Progress as AntdProgress } from "antd";
+import {
+    Progress as AntdProgress,
+    ProgressProps as AntdProgressProps,
+} from "antd";
 
-export interface ProgressProps {}
+export interface ProgressProps extends AntdProgressProps {}
 
 const Progress: React.FC<ProgressProps> = (props) => {
-    return <AntdProgress />;
+    return <AntdProgress {...props} />;
 };
 
 export { Progress };
