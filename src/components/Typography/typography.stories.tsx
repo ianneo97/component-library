@@ -8,8 +8,9 @@ export default {
 export const Default = () => {
     return (
         <>
-            <Title level={3}>Title</Title>
-            <Typography>Normal Text</Typography>
+            <Title level={3} description="View and Manage Business Partners">
+                Partners
+            </Title>
         </>
     );
 };

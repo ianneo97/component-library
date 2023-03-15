@@ -12,6 +12,7 @@ import { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { ExpandableConfig, TableRowSelection } from "antd/es/table/interface";
 import { cloneDeep } from "lodash";
 import { useCallback, useEffect, useState } from "react";
+import { Link } from "../Typography";
 import "./table.css";
 
 export interface TableProps<T = any> {
@@ -31,6 +32,9 @@ const Table: React.FC<TableProps> = (props) => {
     const [filteredCols, setFilteredCols] = useState(props.columns);
     const [column, setColumn] = useState<string>("");
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedFilters, setSelectedFilters] = useState<CheckboxValueType[]>(
+        []
+    );
 
     const rowSelection = {
         selectedRowKeys: selectedKeys,
@@ -63,6 +67,12 @@ const Table: React.FC<TableProps> = (props) => {
         setFilteredCols(
             clonedCols.filter((col) => !values.includes(col.title as string))
         );
+        setSelectedFilters(values);
+    };
+
+    const resetFilters = () => {
+        setFilteredCols(props.columns);
+        setSelectedFilters([]);
     };
 
     useEffect(() => {
@@ -104,16 +114,23 @@ const Table: React.FC<TableProps> = (props) => {
                                 className="flex-table-control-filter-popover"
                                 overlayClassName="flex-table-control-popover-overlay"
                                 content={
-                                    <Checkbox.Group
-                                        options={props.columns.map(
-                                            (column) => ({
-                                                label: column.title as string,
-                                                value: column.title as string,
-                                                disabled: column.title === "ID",
-                                            })
-                                        )}
-                                        onChange={onFiltersChanged}
-                                    />
+                                    <>
+                                        <Checkbox.Group
+                                            options={props.columns.map(
+                                                (column) => ({
+                                                    label: column.title as string,
+                                                    value: column.title as string,
+                                                    disabled:
+                                                        column.title === "ID",
+                                                })
+                                            )}
+                                            onChange={onFiltersChanged}
+                                            value={selectedFilters}
+                                        />
+                                        <Link onClick={resetFilters}>
+                                            Reset
+                                        </Link>
+                                    </>
                                 }
                             >
                                 <FilterOutlined />

@@ -1,0 +1,28 @@
+.lfx-typography-wrapper {
+    display: flex;
+    gap: 8px;
+}
+
+.lfx-typography-rect {
+    width: 8px;
+    background-color: #972d47;
+}
+
+.lfx-typography-inner-wrapper {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.lfx-typography-title {
+    margin-top: 0.25em !important;
+    margin-bottom: 0.25em !important;
+    font-size: 24px !important;
+    font-weight: 600 !important;
+}
+
+.lfx-typography-description {
+    color: #939393;
+    font-weight: 400;
+    font-size: 12px;
+}
