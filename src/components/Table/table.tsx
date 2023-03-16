@@ -1,18 +1,16 @@
 import { FilterOutlined, SearchOutlined } from "@ant-design/icons";
 import {
-    Checkbox,
+    Form,
     Input,
     Popover,
     Select,
     Table as AntdTable,
     Typography,
 } from "antd";
-import { CheckboxValueType } from "antd/es/checkbox/Group";
 import { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { ExpandableConfig, TableRowSelection } from "antd/es/table/interface";
-import { cloneDeep } from "lodash";
-import { useCallback, useEffect, useState } from "react";
-import { Link } from "../Typography";
+import { useCallback, useState } from "react";
+import { Button } from "../Button";
 import "./table.css";
 
 export interface TableProps<T = any> {
@@ -27,14 +25,16 @@ export interface TableProps<T = any> {
 }
 
 const Table: React.FC<TableProps> = (props) => {
+    const [form] = Form.useForm();
     const [filterValue, setFilterValue] = useState<string>("");
     const [filteredData, setFilteredData] = useState(props.data);
     const [filteredCols, setFilteredCols] = useState(props.columns);
-    const [column, setColumn] = useState<string>("");
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
-    const [selectedFilters, setSelectedFilters] = useState<CheckboxValueType[]>(
-        []
-    );
+
+    const conditions = [
+        { label: "Contains", value: "contains" },
+        { label: "Equals", value: "equals" },
+    ];
 
     const rowSelection = {
         selectedRowKeys: selectedKeys,
@@ -44,40 +44,49 @@ const Table: React.FC<TableProps> = (props) => {
     };
 
     const onSearch = useCallback(() => {
-        const content = column
-            ? props.data.filter((item: any) =>
-                  JSON.stringify(item[column])
-                      .toLocaleLowerCase()
-                      .includes(filterValue.toLocaleLowerCase())
-              )
-            : props.data.filter((item) =>
-                  Object.values(item).some((value) =>
-                      JSON.stringify(value)
-                          .toLocaleLowerCase()
-                          .includes(filterValue.toLocaleLowerCase())
-                  )
-              );
+        const content = props.data.filter((item) =>
+            Object.values(item).some((value) =>
+                JSON.stringify(value)
+                    .toLocaleLowerCase()
+                    .includes(filterValue.toLocaleLowerCase())
+            )
+        );
 
         setFilteredData(content);
-    }, [column, filterValue, props.data]);
+    }, [filterValue, props.data]);
 
-    const onFiltersChanged = (values: CheckboxValueType[]) => {
-        const clonedCols = cloneDeep(props.columns);
-
+    const onSelectChange = (value: string[]) => {
         setFilteredCols(
-            clonedCols.filter((col) => !values.includes(col.title as string))
+            props.columns.filter((column: any) =>
+                value.includes(column.dataIndex)
+            )
         );
-        setSelectedFilters(values);
     };
 
-    const resetFilters = () => {
-        setFilteredCols(props.columns);
-        setSelectedFilters([]);
-    };
+    const onSubmit = async () => {
+        await form.validateFields();
 
-    useEffect(() => {
-        onSearch();
-    }, [column, onSearch]);
+        const values = form.getFieldsValue(true);
+
+        switch (values.condition) {
+            case "contains":
+                return setFilteredData(
+                    props.data.filter((x) =>
+                        JSON.stringify(x[values.name])
+                            .toLowerCase()
+                            .includes(values.value.toLowerCase())
+                    )
+                );
+            case "equals":
+                return setFilteredData(
+                    props.data.filter(
+                        (x) => JSON.stringify(x[values.name]) === values.value
+                    )
+                );
+            default:
+                return setFilteredData(props.data);
+        }
+    };
 
     return (
         <>
@@ -87,13 +96,16 @@ const Table: React.FC<TableProps> = (props) => {
                         <Input
                             placeholder="Search"
                             onPressEnter={onSearch}
+                            onKeyUp={onSearch}
                             onChange={(e) => setFilterValue(e.target.value)}
                             addonAfter={<SearchOutlined />}
                         />
 
-                        <div className="flex-table-control-filter">
-                            <Typography>Columns: </Typography>
+                        <div className="flex-table-control-filter flex-select-filter">
+                            <Typography>Columns:</Typography>
                             <Select
+                                allowClear
+                                mode="multiple"
                                 options={props.columns
                                     .filter(
                                         (column: any) =>
@@ -103,7 +115,13 @@ const Table: React.FC<TableProps> = (props) => {
                                         label: column.title,
                                         value: column.dataIndex,
                                     }))}
-                                onChange={(value) => setColumn(value as string)}
+                                defaultValue={props.columns
+                                    .filter(
+                                        (column: any) =>
+                                            column.dataIndex !== "actions"
+                                    )
+                                    .map((column: any) => column.dataIndex)}
+                                onChange={onSelectChange}
                             />
                         </div>
 
@@ -115,21 +133,53 @@ const Table: React.FC<TableProps> = (props) => {
                                 overlayClassName="flex-table-control-popover-overlay"
                                 content={
                                     <>
-                                        <Checkbox.Group
-                                            options={props.columns.map(
-                                                (column) => ({
-                                                    label: column.title as string,
-                                                    value: column.title as string,
-                                                    disabled:
-                                                        column.title === "ID",
-                                                })
-                                            )}
-                                            onChange={onFiltersChanged}
-                                            value={selectedFilters}
-                                        />
-                                        <Link onClick={resetFilters}>
-                                            Reset
-                                        </Link>
+                                        <Form
+                                            form={form}
+                                            className="flex-table-form"
+                                        >
+                                            <Form.Item
+                                                label="Column"
+                                                name="name"
+                                            >
+                                                <Select
+                                                    allowClear
+                                                    options={props.columns
+                                                        .filter(
+                                                            (column: any) =>
+                                                                column.dataIndex !==
+                                                                "actions"
+                                                        )
+                                                        .map((column: any) => ({
+                                                            label: column.title,
+                                                            value: column.dataIndex,
+                                                        }))}
+                                                />
+                                            </Form.Item>
+
+                                            <Form.Item
+                                                label="Condition"
+                                                name="condition"
+                                            >
+                                                <Select options={conditions} />
+                                            </Form.Item>
+
+                                            <Form.Item
+                                                label="Value"
+                                                name="value"
+                                            >
+                                                <Input
+                                                    onPressEnter={onSubmit}
+                                                />
+                                            </Form.Item>
+
+                                            <Button
+                                                mode="create"
+                                                onClick={() => onSubmit()}
+                                                className="flex-table-form-btn-submit"
+                                            >
+                                                Search
+                                            </Button>
+                                        </Form>
                                     </>
                                 }
                             >

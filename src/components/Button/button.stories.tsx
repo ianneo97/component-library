@@ -40,6 +40,13 @@ export const DefaultButton = () => {
                 <MessageOutlined />
                 <Typography>Add Comment</Typography>
             </Button>
+
+            <br />
+
+            <Button mode="comment-hollow">
+                <MessageOutlined />
+                <Typography>Add Comment</Typography>
+            </Button>
         </>
     );
 };

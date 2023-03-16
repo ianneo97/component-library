@@ -28,7 +28,9 @@ const mockColumns = [
     { title: "ID", dataIndex: "id" },
     {
         title: "Name",
-        render: (value: any) => value.name.locales[0].text,
+        dataIndex: "name",
+        render: (_: any, value: any) => value.name.locales[0].text,
+        // dataIndex: "name",
     },
     { title: "Age", dataIndex: "age" },
     { title: "Actions", dataIndex: "actions" },
