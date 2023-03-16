@@ -1,0 +1,41 @@
+.lfx-form {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.lfx-form .ant-form-item-label {
+    width: 25%;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 400;
+    white-space: break-spaces;
+}
+
+.lfx-form .ant-form-item-control {
+    margin-right: 14px;
+}
+
+.lfx-form-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 35dvh;
+    max-height: 35dvh;
+}
+
+.lfx-form-header {
+    font-weight: 600;
+    margin-bottom: 32px;
+    font-size: 14px;
+}
+
+.custom-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding: 15px;
+}
+
+.custom-modal-footer .prv-btn {
+    margin-right: auto;
+}

@@ -1,5 +1,7 @@
 import { Button } from "antd";
 import { useState } from "react";
+import { Steps } from "../Steps";
+import { Typography } from "../Typography";
 import { Modal, StepperModal } from "./modal";
 
 export default {
@@ -39,6 +41,7 @@ export const Default = () => {
 
 export const StepModal = () => {
     const [open, setOpen] = useState(false);
+    const steps = ["Requried Fields", "Optional Fields", "Review"];
 
     const submitFn = () => {
         setOpen(false);
@@ -54,14 +57,22 @@ export const StepModal = () => {
                 open={open}
                 title="Storybook Modal"
                 subtitle="If a product has been already traced, the changes will immediately be reflected in past orders. Thus, be careful to update the details"
-                steps={["Required", "Optional"]}
+                steps={
+                    <>
+                        <Steps
+                            direction="vertical"
+                            items={steps.map((step) => ({ title: step }))}
+                            size="small"
+                        />
+                    </>
+                }
                 onOk={submitFn}
                 onCancel={cancelFn}
                 closable={true}
                 okText="Submit"
                 cancelText="Close"
             >
-                <p>Modal content</p>
+                <Typography>Hi there</Typography>
             </StepperModal>
 
             <Button onClick={() => setOpen(true)}>Click Me!</Button>

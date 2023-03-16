@@ -1,4 +1,4 @@
-import { Modal as AntdModal, ModalProps as AntdModalProps, Steps } from "antd";
+import { Modal as AntdModal, ModalProps as AntdModalProps } from "antd";
 import { Button } from "../Button";
 import { Typography } from "../Typography";
 import "./modal.css";
@@ -10,10 +10,11 @@ export interface CustomStepProps {
 export interface ModalProps extends AntdModalProps {}
 export interface StepperModalProps extends AntdModalProps {
     subtitle?: string;
-    steps?: string[];
+    steps?: React.ReactNode;
+    footerClassName?: string;
 }
 
-const Modal: React.FC<ModalProps> = (props) => {
+export const Modal: React.FC<ModalProps> = (props) => {
     return (
         <>
             <AntdModal
@@ -32,18 +33,27 @@ const Modal: React.FC<ModalProps> = (props) => {
     );
 };
 
-const StepperModal: React.FC<StepperModalProps> = (props) => {
+export const StepperModal: React.FC<StepperModalProps> = (props) => {
     return (
         <>
             <AntdModal
                 {...props}
+                width={750}
                 className={`lfx-modal ${props.className}`}
-                footer={[
-                    <div className="lfx-modal-footer">
-                        <Button mode="comment-hollow">Cancel</Button>
-                        <Button mode="comment">OK</Button>
-                    </div>,
-                ]}
+                footer={
+                    props.footer ? (
+                        <div className={props.footerClassName}>
+                            {props.footer}
+                        </div>
+                    ) : (
+                        [
+                            <div className="lfx-modal-footer">
+                                <Button mode="comment-hollow">Cancel</Button>
+                                <Button mode="comment">OK</Button>
+                            </div>,
+                        ]
+                    )
+                }
             >
                 <div className="lfx-modal-stepper-body">
                     <Typography className="lfx-modal-subtitle">
@@ -51,25 +61,13 @@ const StepperModal: React.FC<StepperModalProps> = (props) => {
                     </Typography>
 
                     <div className="lfx-stepper-body">
-                        <Steps
-                            direction="vertical"
-                            items={props.steps?.map((step) => ({
-                                title: step,
-                            }))}
-                            size="small"
-                        ></Steps>
-
+                        <div className="lfx-stepper-sidebar">{props.steps}</div>
                         <div className="lfx-stepper-content">
                             {props.children}
                         </div>
                     </div>
                 </div>
-
-                {/* {props?.children} */}
             </AntdModal>
         </>
     );
 };
-
-export { Modal };
-export { StepperModal };

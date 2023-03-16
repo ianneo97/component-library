@@ -39,17 +39,16 @@
 
 .lfx-stepper-body {
     display: flex;
-    /* gap: 12px; */
     border: 1px solid #f2f2f2;
 }
 
-.lfx-stepper-body .ant-steps {
-    flex-basis: 30%;
+.lfx-stepper-body .lfx-stepper-sidebar {
+    flex-basis: 25%;
     padding: 16px;
     background-color: #f2f2f2;
 }
 
 .lfx-stepper-body .lfx-stepper-content {
     flex-basis: 70%;
-    padding-left: 16px;
+    padding: 16px;
 }

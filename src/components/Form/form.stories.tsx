@@ -1,6 +1,11 @@
-import { Button, Card, Input, Select } from "antd";
+import { Input } from "antd";
 import { useState } from "react";
-import { Form, FormItemProps, renderFormItem, useForm } from "./form";
+import { Button } from "../Button";
+import { Steps } from "../Steps";
+import { StepperModal } from "../Modal";
+import { Select } from "../Select";
+import { Typography } from "../Typography";
+import { Form, FormItem, useForm } from "./form";
 
 export default {
     title: "Form",
@@ -10,80 +15,85 @@ export default {
 export const FormWithSplit = () => {
     const [form] = useForm();
     const [data, setData] = useState("");
-
-    const items: FormItemProps[] = [
-        { label: "Nameeeeeeeeeeeeeeeee", name: "name", children: <Input /> },
-        {
-            label: "Age",
-            name: "age",
-            children: <Input />,
-            rules: [{ required: true, message: "Age is required" }],
-            dependencies: ["name"],
-        },
-        {
-            label: "Description",
-            name: "description",
-            children: <Select style={{ width: "100%" }} />,
-        },
-    ];
-
-    function getValues() {
-        const data = form.getFieldsValue(true);
-        form.validateFields();
-
-        setData(JSON.stringify(data));
-    }
+    const [current, setCurrent] = useState(0);
+    const steps = ["Required Fields", "Optional Fields", "Review"];
 
     return (
         <>
-            <Card>
-                <Form form={form} split={true}>
-                    {items.map((item) => renderFormItem(item))}
-                </Form>
-                <div style={{ display: "flex", placeContent: "flex-end" }}>
-                    <Button onClick={getValues} type="primary">
-                        Save
-                    </Button>
+            <StepperModal
+                open={true}
+                title="Create new product"
+                footer={[
+                    <>
+                        {current > 0 ? (
+                            <Button
+                                mode="comment-hollow"
+                                className="prv-btn"
+                                onClick={() => setCurrent(current - 1)}
+                            >
+                                Previous
+                            </Button>
+                        ) : null}
+                        <Button mode="comment-hollow">Cancel</Button>
+                        {current < steps.length - 1 ? (
+                            <Button
+                                mode="comment"
+                                onClick={() => setCurrent(current + 1)}
+                            >
+                                Next
+                            </Button>
+                        ) : (
+                            <Button mode="comment">Submit</Button>
+                        )}
+                    </>,
+                ]}
+                footerClassName="custom-modal-footer"
+                subtitle="If a product has been already traced, the changes will immediately be reflected in past orders.
+                Thus, be careful to update the details"
+                steps={
+                    <>
+                        <Steps
+                            direction="vertical"
+                            items={steps.map((step) => ({ title: step }))}
+                            size="small"
+                            current={current}
+                        ></Steps>
+                    </>
+                }
+            >
+                <div className="lfx-form-content">
+                    {current === 0 ? (
+                        <>
+                            <Typography className="lfx-form-header">
+                                Please fill out the required fields
+                            </Typography>
+
+                            <Form form={form}>
+                                <FormItem label="Product Name">
+                                    <Input />
+                                </FormItem>
+
+                                <FormItem label="Content">
+                                    <Select />
+                                </FormItem>
+
+                                <FormItem label="Help">
+                                    <Input />
+                                </FormItem>
+                                <FormItem label="Help">
+                                    <Input />
+                                </FormItem>
+                                <FormItem label="Help">
+                                    <Input />
+                                </FormItem>
+                                <FormItem label="Help">
+                                    <Input />
+                                </FormItem>
+                            </Form>
+                        </>
+                    ) : null}
                 </div>
-            </Card>
-            Form Data: {data}
-        </>
-    );
-};
-
-export const DefaultForm = () => {
-    const [form] = useForm();
-    const [data, setData] = useState("");
-
-    const items: FormItemProps[] = [
-        { label: "Nameeeeeeeeeeeeeeeee", name: "name", children: <Input /> },
-        {
-            // label: "Age With Many Many Spaces ",
-            name: "age",
-            children: <Input />,
-            rules: [{ required: true, message: "Age is required" }],
-            dependencies: ["name"],
-        },
-        { label: "Description", name: "description", children: <Input /> },
-    ];
-
-    function getValues() {
-        const data = form.getFieldsValue(true);
-        form.validateFields();
-
-        setData(JSON.stringify(data));
-    }
-
-    return (
-        <>
-            <Form form={form}>
-                {items.map((item) => renderFormItem(item))}
-                <div style={{ display: "flex", placeContent: "flex-end" }}>
-                    <Button onClick={getValues} type="primary">
-                        Save
-                    </Button>
-                </div>
-            </Form>
+            </StepperModal>
             Form Data: {data}
         </>
     );
