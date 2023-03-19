@@ -1,4 +1,3 @@
-import { Input } from "antd";
 import { useState } from "react";
 import { Button } from "../Button";
 import { Steps } from "../Steps";
@@ -6,6 +5,9 @@ import { StepperModal } from "../Modal";
 import { Select } from "../Select";
 import { Typography } from "../Typography";
 import { Form, FormItem, useForm } from "./form";
+import { Input } from "../Input";
+import { InputNumber } from "../InputNumber";
+import { Switch } from "../Switch";
 
 export default {
     title: "Form",
@@ -64,32 +66,129 @@ export const FormWithSplit = () => {
                 <div className="lfx-form-content">
                     {current === 0 ? (
                         <>
-                            <Typography className="lfx-form-header">
-                                Please fill out the required fields
-                            </Typography>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    gap: "10px",
+                                }}
+                            >
+                                <Typography
+                                    className="lfx-form-header"
+                                    style={{ marginBottom: "16px" }}
+                                >
+                                    Please fill out the required fields
+                                </Typography>
 
-                            <Form form={form}>
-                                <FormItem label="Product Name">
-                                    <Input />
-                                </FormItem>
+                                <Form form={form}>
+                                    <FormItem label={"product:productName"}>
+                                        <Input />
+                                    </FormItem>
 
-                                <FormItem label="Content">
-                                    <Select />
-                                </FormItem>
+                                    <FormItem label={"product:create.cost"}>
+                                        <InputNumber />
+                                    </FormItem>
 
-                                <FormItem label="Help">
-                                    <Input />
-                                </FormItem>
-                                <FormItem label="Help">
-                                    <Input />
-                                </FormItem>
-                                <FormItem label="Help">
-                                    <Input />
-                                </FormItem>
-                                <FormItem label="Help">
-                                    <Input />
-                                </FormItem>
-                            </Form>
+                                    <FormItem label={"product:category"}>
+                                        <Select showSearch />
+                                    </FormItem>
+
+                                    <FormItem label={"product:subCategory"}>
+                                        <Select showSearch />
+                                    </FormItem>
+
+                                    <FormItem label={"product:measureUnit"}>
+                                        <Select />
+                                    </FormItem>
+
+                                    <FormItem label={"product:measureValue"}>
+                                        <InputNumber />
+                                    </FormItem>
+                                </Form>
+                            </div>
+                        </>
+                    ) : null}
+
+                    {current === 1 ? (
+                        <>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    gap: "10px",
+                                }}
+                            >
+                                <Typography
+                                    className="lfx-form-header"
+                                    style={{ marginBottom: "16px" }}
+                                >
+                                    You may skip this part and edit these fields
+                                    later
+                                </Typography>
+
+                                <Form form={form}>
+                                    <FormItem
+                                        name="isActive"
+                                        label={"product:active"}
+                                    >
+                                        <Switch />
+                                    </FormItem>
+
+                                    <FormItem
+                                        name="weight"
+                                        label={"product:weight"}
+                                    >
+                                        <InputNumber
+                                            style={{
+                                                width: "100%",
+                                            }}
+                                        />
+                                    </FormItem>
+
+                                    <FormItem
+                                        name="color"
+                                        label={"product:colorCode"}
+                                    >
+                                        <Input />
+                                    </FormItem>
+
+                                    <FormItem
+                                        name="externalDataId"
+                                        label={"product:lfItemNo"}
+                                    >
+                                        <Input />
+                                    </FormItem>
+
+                                    <FormItem
+                                        name="hsCode"
+                                        label={"product:hsCode"}
+                                    >
+                                        <Input />
+                                    </FormItem>
+
+                                    <FormItem name="sku" label={"product:sku"}>
+                                        <Input />
+                                    </FormItem>
+
+                                    <FormItem name="upc" label={"product:upc"}>
+                                        <Input />
+                                    </FormItem>
+
+                                    <FormItem
+                                        name="code"
+                                        label={"product:refNo"}
+                                    >
+                                        <Input />
+                                    </FormItem>
+
+                                    <FormItem
+                                        name="collection"
+                                        label={"product:collection"}
+                                    >
+                                        <Input />
+                                    </FormItem>
+                                </Form>
+                            </div>
                         </>
                     ) : null}
                 </div>

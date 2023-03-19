@@ -1,0 +1,40 @@
+.lfx-info-card .ant-card-body {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    padding-left: 9px;
+}
+
+.lfx-info-card .ant-card-body::before,
+.lfx-info-card .ant-card-body::after {
+    display: none;
+}
+
+.lfx-info-card .icon-container .ant-image-img {
+    width: 88px;
+    height: 88px;
+    object-fit: cover;
+}
+
+.lfx-info-card .info-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-tags-container {
+    margin-top: 4px;
+}
+
+.lfx-info-card .ant-tag {
+    background-color: #939393;
+    color: white;
+    border-radius: 999px;
+    text-transform: uppercase;
+}
+
+.lfx-info-card .info-main-container {
+    display: flex;
+    flex-direction: row;
+    gap: 13px;
+}

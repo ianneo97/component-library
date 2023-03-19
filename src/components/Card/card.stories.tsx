@@ -1,6 +1,8 @@
+import { Image } from "antd";
 import { Button } from "../Button";
 import { Table } from "../Table";
-import { Card } from "./card";
+import { Typography } from "../Typography";
+import { Card, InfoCard } from "./card";
 
 export default {
     title: "Card",
@@ -40,7 +42,7 @@ export const Default = () => {
             <div style={{ display: "flex" }}>
                 <Card style={{ flex: 1 }}>
                     <Table
-                        data={mockData}
+                        dataSource={mockData}
                         columns={mockColumns}
                         rowKey="id"
                         actionContent={
@@ -54,5 +56,22 @@ export const Default = () => {
                 </Card>
             </div>
         </>
+    );
+};
+
+export const InfoExample = () => {
+    return (
+        <InfoCard
+            icon={
+                "https://images.getrecipekit.com/20210919052613-breakfast-toast-topper-1030x687.jpg?width=650&quality=90&"
+            }
+            infoTitle="LFX Digital"
+            information={
+                <>
+                    <Typography>Supplier Code: LFX-HK-DIV-0001</Typography>
+                </>
+            }
+            tags={["Agent", "Supplier", "Haha", "Supply chain and node type"]}
+        ></InfoCard>
     );
 };

@@ -1,50 +1,48 @@
 import { FilterOutlined, SearchOutlined } from "@ant-design/icons";
 import {
+    Checkbox,
     Form,
     Input,
     Popover,
-    Select,
     Table as AntdTable,
+    TableProps as AntdTableProps,
     Typography,
 } from "antd";
-import { ColumnsType, TablePaginationConfig } from "antd/es/table";
-import { ExpandableConfig, TableRowSelection } from "antd/es/table/interface";
-import { useCallback, useState } from "react";
+import { CheckboxChangeEvent } from "antd/es/checkbox";
+import { CheckboxValueType } from "antd/es/checkbox/Group";
+import { TablePaginationConfig } from "antd/es/table";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "../Button";
+import { Select } from "../Select";
 import "./table.css";
 
-export interface TableProps<T = any> {
-    data: T[];
-    columns: ColumnsType<T>;
-    rowKey: string;
-    className?: string;
-    paginationConfig?: TablePaginationConfig | false;
-    expandable?: ExpandableConfig<T>;
-    rowSelection?: TableRowSelection<T>;
+export interface TableProps<T = any> extends AntdTableProps<T> {
     actionContent?: React.ReactNode;
 }
 
 const Table: React.FC<TableProps> = (props) => {
     const [form] = Form.useForm();
     const [filterValue, setFilterValue] = useState<string>("");
-    const [filteredData, setFilteredData] = useState(props.data);
+    const [filteredData, setFilteredData] = useState(props.dataSource);
     const [filteredCols, setFilteredCols] = useState(props.columns);
-    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [checked, setChecked] = useState(true);
+    const [selectedCheckboxes, setSelectedCheckboxes] = useState<
+        CheckboxValueType[]
+    >(props.columns?.map((x) => x.title?.toString() || "") || []);
+
+    const columns = useMemo(
+        () => props.columns?.filter((x) => x.title !== "Actions") || [],
+        // () => props.columns || [],
+        [props.columns]
+    );
 
     const conditions = [
         { label: "Contains", value: "contains" },
         { label: "Equals", value: "equals" },
     ];
 
-    const rowSelection = {
-        selectedRowKeys: selectedKeys,
-        onChange: (selectedRowKeys: React.Key[]) => {
-            setSelectedKeys(selectedRowKeys);
-        },
-    };
-
     const onSearch = useCallback(() => {
-        const content = props.data.filter((item) =>
+        const content = props.dataSource?.filter((item) =>
             Object.values(item).some((value) =>
                 JSON.stringify(value)
                     .toLocaleLowerCase()
@@ -53,15 +51,7 @@ const Table: React.FC<TableProps> = (props) => {
         );
 
         setFilteredData(content);
-    }, [filterValue, props.data]);
-
-    const onSelectChange = (value: string[]) => {
-        setFilteredCols(
-            props.columns.filter((column: any) =>
-                value.includes(column.dataIndex)
-            )
-        );
-    };
+    }, [filterValue, props.dataSource]);
 
     const onSubmit = async () => {
         await form.validateFields();
@@ -70,23 +60,70 @@ const Table: React.FC<TableProps> = (props) => {
 
         switch (values.condition) {
             case "contains":
-                return setFilteredData(
-                    props.data.filter((x) =>
-                        JSON.stringify(x[values.name])
-                            .toLowerCase()
-                            .includes(values.value.toLowerCase())
-                    )
-                );
+                const newVal = props.dataSource?.filter((obj) => {
+                    // If user didn't input a value, will return true to sort of reset the list.
+                    if (!values.value) return true;
+
+                    const propertyNames = values.name.split(".");
+                    const value = propertyNames.reduce(
+                        (acc: any, curr: any) => {
+                            return acc && acc[curr];
+                        },
+                        obj
+                    );
+
+                    // If the value exists and user inputted a value, will check against the logic.
+                    return values.value && value
+                        ? JSON.stringify(value)
+                              .toLowerCase()
+                              .includes(values.value.toLowerCase())
+                        : false; // Default will be false.
+                });
+
+                return setFilteredData(newVal);
             case "equals":
                 return setFilteredData(
-                    props.data.filter(
+                    props.dataSource?.filter(
                         (x) => JSON.stringify(x[values.name]) === values.value
                     )
                 );
             default:
-                return setFilteredData(props.data);
+                return setFilteredData(props.dataSource);
         }
     };
+
+    const onGroupChange = (list: CheckboxValueType[]) => {
+        setSelectedCheckboxes(list);
+        setChecked(list.length === columns.length);
+        setFilteredCols(
+            props.columns?.filter((x) => {
+                if (x.title?.toString() === "Actions") return true;
+
+                return list.includes(x.title?.toString() || "");
+            })
+        );
+    };
+
+    const onCheckAll = (e: CheckboxChangeEvent) => {
+        setChecked(e.target.checked);
+        setSelectedCheckboxes(
+            e.target.checked
+                ? columns.map((x) => x.title?.toString() || "")
+                : []
+        );
+        setFilteredCols(
+            e.target.checked
+                ? props.columns
+                : props.columns?.filter(
+                      (x) => x.title?.toString() === "Actions"
+                  )
+        );
+    };
+
+    useEffect(() => {
+        setFilteredCols(props.columns);
+        setFilteredData(props.dataSource);
+    }, [props.columns, props.dataSource]);
 
     return (
         <>
@@ -103,25 +140,45 @@ const Table: React.FC<TableProps> = (props) => {
 
                         <div className="flex-table-control-filter flex-select-filter">
                             <Typography>Columns:</Typography>
+
                             <Select
-                                allowClear
-                                mode="multiple"
-                                options={props.columns
-                                    .filter(
-                                        (column: any) =>
-                                            column.dataIndex !== "actions"
-                                    )
-                                    .map((column: any) => ({
-                                        label: column.title,
-                                        value: column.dataIndex,
-                                    }))}
-                                defaultValue={props.columns
-                                    .filter(
-                                        (column: any) =>
-                                            column.dataIndex !== "actions"
-                                    )
-                                    .map((column: any) => column.dataIndex)}
-                                onChange={onSelectChange}
+                                className="flex-table-control-filter-select"
+                                value={selectedCheckboxes
+                                    .filter((x) => x !== "Actions")
+                                    .join(", ")}
+                                dropdownRender={() => (
+                                    <>
+                                        <div>
+                                            <Checkbox
+                                                className="lfx-table-checkbox"
+                                                checked={checked}
+                                                onChange={(e) => onCheckAll(e)}
+                                            >
+                                                All
+                                            </Checkbox>
+
+                                            <Checkbox.Group
+                                                onChange={(e) =>
+                                                    onGroupChange(e)
+                                                }
+                                                className="lfx-table-checkbox-group"
+                                                value={selectedCheckboxes}
+                                                options={
+                                                    columns
+                                                        ? columns.map((x) => ({
+                                                              label:
+                                                                  x.title?.toString() ||
+                                                                  "",
+                                                              value:
+                                                                  x.title?.toString() ||
+                                                                  "",
+                                                          }))
+                                                        : []
+                                                }
+                                            />
+                                        </div>
+                                    </>
+                                )}
                             />
                         </div>
 
@@ -143,16 +200,26 @@ const Table: React.FC<TableProps> = (props) => {
                                             >
                                                 <Select
                                                     allowClear
-                                                    options={props.columns
-                                                        .filter(
-                                                            (column: any) =>
-                                                                column.dataIndex !==
-                                                                "actions"
-                                                        )
-                                                        .map((column: any) => ({
-                                                            label: column.title,
-                                                            value: column.dataIndex,
-                                                        }))}
+                                                    options={columns.map(
+                                                        (column: any) => {
+                                                            let dataIndex =
+                                                                column.dataIndex;
+                                                            if (
+                                                                column.dataIndex instanceof
+                                                                Array
+                                                            ) {
+                                                                dataIndex =
+                                                                    column.dataIndex.join(
+                                                                        "."
+                                                                    );
+                                                            }
+
+                                                            return {
+                                                                label: column.title,
+                                                                value: dataIndex,
+                                                            };
+                                                        }
+                                                    )}
                                                 />
                                             </Form.Item>
 
@@ -195,8 +262,9 @@ const Table: React.FC<TableProps> = (props) => {
                 </div>
 
                 <AntdTable
+                    {...props}
                     dataSource={filteredData}
-                    columns={filteredCols.map((column) => ({
+                    columns={filteredCols?.map((column) => ({
                         ...column,
                         defaultSortOrder: "ascend",
                         showSorterTooltip: false,
@@ -204,10 +272,6 @@ const Table: React.FC<TableProps> = (props) => {
                     className={`lfx-table ${props.className}`}
                     size={"small"}
                     scroll={{ x: "max-content" }}
-                    pagination={props.paginationConfig}
-                    rowKey={props.rowKey}
-                    expandable={props.expandable}
-                    rowSelection={rowSelection}
                 />
             </div>
         </>

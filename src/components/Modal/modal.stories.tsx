@@ -1,5 +1,5 @@
-import { Button } from "antd";
 import { useState } from "react";
+import { Button } from "../Button";
 import { Steps } from "../Steps";
 import { Typography } from "../Typography";
 import { Modal, StepperModal } from "./modal";
@@ -30,11 +30,19 @@ export const Default = () => {
                 closable={true}
                 okText="Submit"
                 cancelText="Close"
+                footerChildren={
+                    <>
+                        <Button mode="comment-hollow">Cancel</Button>
+                        <Button mode="comment">OK</Button>
+                    </>
+                }
             >
                 <p>Modal content</p>
             </Modal>
 
-            <Button onClick={() => setOpen(true)}>Click Me!</Button>
+            <Button mode="comment" onClick={() => setOpen(true)}>
+                Click Me!
+            </Button>
         </>
     );
 };
@@ -66,6 +74,12 @@ export const StepModal = () => {
                         />
                     </>
                 }
+                footer={
+                    <>
+                        <Button mode="comment-hollow">Cancel</Button>
+                        <Button mode="comment">OK</Button>
+                    </>
+                }
                 onOk={submitFn}
                 onCancel={cancelFn}
                 closable={true}
@@ -75,7 +89,9 @@ export const StepModal = () => {
                 <Typography>Hi there</Typography>
             </StepperModal>
 
-            <Button onClick={() => setOpen(true)}>Click Me!</Button>
+            <Button mode="comment" onClick={() => setOpen(true)}>
+                Click Me!
+            </Button>
         </>
     );
 };

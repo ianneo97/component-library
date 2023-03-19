@@ -1,5 +1,4 @@
 import { Modal as AntdModal, ModalProps as AntdModalProps } from "antd";
-import { Button } from "../Button";
 import { Typography } from "../Typography";
 import "./modal.css";
 
@@ -7,11 +6,14 @@ export interface CustomStepProps {
     title: string;
     children: React.ReactNode;
 }
-export interface ModalProps extends AntdModalProps {}
+export interface ModalProps extends AntdModalProps {
+    footerChildren?: React.ReactNode;
+}
 export interface StepperModalProps extends AntdModalProps {
     subtitle?: string;
     steps?: React.ReactNode;
     footerClassName?: string;
+    footerChildren?: React.ReactNode;
 }
 
 export const Modal: React.FC<ModalProps> = (props) => {
@@ -22,8 +24,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
                 className={`lfx-modal ${props.className}`}
                 footer={[
                     <div className="lfx-modal-footer">
-                        <Button mode="comment-hollow">Cancel</Button>
-                        <Button mode="comment">OK</Button>
+                        {props.footerChildren}
                     </div>,
                 ]}
             >
@@ -41,18 +42,11 @@ export const StepperModal: React.FC<StepperModalProps> = (props) => {
                 width={750}
                 className={`lfx-modal ${props.className}`}
                 footer={
-                    props.footer ? (
-                        <div className={props.footerClassName}>
-                            {props.footer}
-                        </div>
-                    ) : (
-                        [
-                            <div className="lfx-modal-footer">
-                                <Button mode="comment-hollow">Cancel</Button>
-                                <Button mode="comment">OK</Button>
-                            </div>,
-                        ]
-                    )
+                    <div
+                        className={`lfx-modal-footer ${props.footerClassName}`}
+                    >
+                        {props.footer}
+                    </div>
                 }
             >
                 <div className="lfx-modal-stepper-body">

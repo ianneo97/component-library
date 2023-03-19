@@ -1,0 +1,33 @@
+.lfx-upload .ant-upload-list-item-container {
+    width: 50px !important;
+    height: 50px !important;
+}
+
+.lfx-upload .ant-upload-list-item-container .ant-upload-list-item {
+    padding: 0px !important;
+    border: 0px !important;
+}
+
+.lfx-upload
+    .ant-upload-list-item-container
+    .ant-upload-list-item
+    .ant-upload-list-item-thumbnail {
+    border-radius: 4px;
+}
+
+.lfx-upload .ant-upload-select {
+    width: 50px !important;
+    height: 50px !important;
+    border: 1px solid #515761 !important;
+    border-radius: 4px !important;
+    background-color: #f2f2f2 !important;
+    color: #515761;
+}
+
+.lfx-upload .ant-upload-select:hover {
+    border: 1px dashed #515761 !important;
+}
+
+.lfx-upload .ant-upload-list-picture-card .ant-upload-list-item-actions {
+    translate: "0, -50%";
+}

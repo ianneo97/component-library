@@ -11,3 +11,7 @@ export * from "./Progress";
 export * from "./Typography";
 export * from "./Popover";
 export * from "./Radio";
+export * from "./Steps";
+export * from "./Descriptions";
+export * from "./Switch";
+export * from "./InputNumber";

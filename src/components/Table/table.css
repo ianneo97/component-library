@@ -77,7 +77,7 @@
 }
 
 .flex-table-control-popover-overlay {
-    width: 300px;
+    width: 350px;
 }
 
 .flex-table-control-popover-overlay .ant-checkbox-group {
@@ -126,6 +126,18 @@
     display: none;
 }
 
+.lfx-table .ant-table-cell {
+    min-width: 200px;
+}
+
+.lfx-table .ant-table-selection-column {
+    min-width: 75px;
+}
+
+.lfx-table {
+    min-height: 400px;
+}
+
 .ant-table thead th {
     border-right: none;
 }
@@ -144,4 +156,26 @@
     width: 30%;
     justify-content: center;
     align-self: flex-end;
+}
+
+.lfx-table-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    padding-top: 4px;
+    gap: 4px;
+}
+
+.lfx-table-checkbox {
+    margin-inline-start: 0px !important;
+    padding-left: 16px;
+}
+
+.lfx-table-checkbox-group .ant-checkbox-wrapper {
+    margin-inline-start: 0px !important;
+    padding-left: 8px;
+}
+
+.flex-table-control-filter-select {
+    max-width: 250px;
 }
