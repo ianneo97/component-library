@@ -18,6 +18,7 @@ import "./table.css";
 
 export interface TableProps<T = any> extends AntdTableProps<T> {
     actionContent?: React.ReactNode;
+    displaySearch?: boolean;
 }
 
 const Table: React.FC<TableProps> = (props) => {
@@ -128,138 +129,158 @@ const Table: React.FC<TableProps> = (props) => {
     return (
         <>
             <div className="flex-table-container">
-                <div className="flex-table-controls-wrapper">
-                    <div className="flex-table-control-container">
-                        <Input
-                            placeholder="Search"
-                            onPressEnter={onSearch}
-                            onKeyUp={onSearch}
-                            onChange={(e) => setFilterValue(e.target.value)}
-                            addonAfter={<SearchOutlined />}
-                        />
+                {props.displaySearch ? (
+                    <>
+                        <div className="flex-table-controls-wrapper">
+                            <div className="flex-table-control-container">
+                                <Input
+                                    placeholder="Search"
+                                    onPressEnter={onSearch}
+                                    onKeyUp={onSearch}
+                                    onChange={(e) =>
+                                        setFilterValue(e.target.value)
+                                    }
+                                    addonAfter={<SearchOutlined />}
+                                />
 
-                        <div className="flex-table-control-filter flex-select-filter">
-                            <Typography>Columns:</Typography>
+                                <div className="flex-table-control-filter flex-select-filter">
+                                    <Typography>Columns:</Typography>
 
-                            <Select
-                                className="flex-table-control-filter-select"
-                                value={selectedCheckboxes
-                                    .filter((x) => x !== "Actions")
-                                    .join(", ")}
-                                dropdownRender={() => (
-                                    <>
-                                        <div>
-                                            <Checkbox
-                                                className="lfx-table-checkbox"
-                                                checked={checked}
-                                                onChange={(e) => onCheckAll(e)}
-                                            >
-                                                All
-                                            </Checkbox>
-
-                                            <Checkbox.Group
-                                                onChange={(e) =>
-                                                    onGroupChange(e)
-                                                }
-                                                className="lfx-table-checkbox-group"
-                                                value={selectedCheckboxes}
-                                                options={
-                                                    columns
-                                                        ? columns.map((x) => ({
-                                                              label:
-                                                                  x.title?.toString() ||
-                                                                  "",
-                                                              value:
-                                                                  x.title?.toString() ||
-                                                                  "",
-                                                          }))
-                                                        : []
-                                                }
-                                            />
-                                        </div>
-                                    </>
-                                )}
-                            />
-                        </div>
-
-                        <div className="flex-table-control-filter">
-                            <Popover
-                                placement="bottom"
-                                trigger="click"
-                                className="flex-table-control-filter-popover"
-                                overlayClassName="flex-table-control-popover-overlay"
-                                content={
-                                    <>
-                                        <Form
-                                            form={form}
-                                            className="flex-table-form"
-                                        >
-                                            <Form.Item
-                                                label="Column"
-                                                name="name"
-                                            >
-                                                <Select
-                                                    allowClear
-                                                    options={columns.map(
-                                                        (column: any) => {
-                                                            let dataIndex =
-                                                                column.dataIndex;
-                                                            if (
-                                                                column.dataIndex instanceof
-                                                                Array
-                                                            ) {
-                                                                dataIndex =
-                                                                    column.dataIndex.join(
-                                                                        "."
-                                                                    );
-                                                            }
-
-                                                            return {
-                                                                label: column.title,
-                                                                value: dataIndex,
-                                                            };
+                                    <Select
+                                        className="flex-table-control-filter-select"
+                                        value={selectedCheckboxes
+                                            .filter((x) => x !== "Actions")
+                                            .join(", ")}
+                                        dropdownRender={() => (
+                                            <>
+                                                <div>
+                                                    <Checkbox
+                                                        className="lfx-table-checkbox"
+                                                        checked={checked}
+                                                        onChange={(e) =>
+                                                            onCheckAll(e)
                                                         }
-                                                    )}
-                                                />
-                                            </Form.Item>
+                                                    >
+                                                        All
+                                                    </Checkbox>
 
-                                            <Form.Item
-                                                label="Condition"
-                                                name="condition"
-                                            >
-                                                <Select options={conditions} />
-                                            </Form.Item>
+                                                    <Checkbox.Group
+                                                        onChange={(e) =>
+                                                            onGroupChange(e)
+                                                        }
+                                                        className="lfx-table-checkbox-group"
+                                                        value={
+                                                            selectedCheckboxes
+                                                        }
+                                                        options={
+                                                            columns
+                                                                ? columns.map(
+                                                                      (x) => ({
+                                                                          label:
+                                                                              x.title?.toString() ||
+                                                                              "",
+                                                                          value:
+                                                                              x.title?.toString() ||
+                                                                              "",
+                                                                      })
+                                                                  )
+                                                                : []
+                                                        }
+                                                    />
+                                                </div>
+                                            </>
+                                        )}
+                                    />
+                                </div>
 
-                                            <Form.Item
-                                                label="Value"
-                                                name="value"
-                                            >
-                                                <Input
-                                                    onPressEnter={onSubmit}
-                                                />
-                                            </Form.Item>
+                                <div className="flex-table-control-filter">
+                                    <Popover
+                                        placement="bottom"
+                                        trigger="click"
+                                        className="flex-table-control-filter-popover"
+                                        overlayClassName="flex-table-control-popover-overlay"
+                                        content={
+                                            <>
+                                                <Form
+                                                    form={form}
+                                                    className="flex-table-form"
+                                                >
+                                                    <Form.Item
+                                                        label="Column"
+                                                        name="name"
+                                                    >
+                                                        <Select
+                                                            allowClear
+                                                            options={columns.map(
+                                                                (
+                                                                    column: any
+                                                                ) => {
+                                                                    let dataIndex =
+                                                                        column.dataIndex;
+                                                                    if (
+                                                                        column.dataIndex instanceof
+                                                                        Array
+                                                                    ) {
+                                                                        dataIndex =
+                                                                            column.dataIndex.join(
+                                                                                "."
+                                                                            );
+                                                                    }
 
-                                            <Button
-                                                mode="create"
-                                                onClick={() => onSubmit()}
-                                                className="flex-table-form-btn-submit"
-                                            >
-                                                Search
-                                            </Button>
-                                        </Form>
-                                    </>
-                                }
-                            >
-                                <FilterOutlined />
-                                <Typography>Filters</Typography>
-                            </Popover>
+                                                                    return {
+                                                                        label: column.title,
+                                                                        value: dataIndex,
+                                                                    };
+                                                                }
+                                                            )}
+                                                        />
+                                                    </Form.Item>
+
+                                                    <Form.Item
+                                                        label="Condition"
+                                                        name="condition"
+                                                    >
+                                                        <Select
+                                                            options={conditions}
+                                                        />
+                                                    </Form.Item>
+
+                                                    <Form.Item
+                                                        label="Value"
+                                                        name="value"
+                                                    >
+                                                        <Input
+                                                            onPressEnter={
+                                                                onSubmit
+                                                            }
+                                                        />
+                                                    </Form.Item>
+
+                                                    <Button
+                                                        mode="create"
+                                                        onClick={() =>
+                                                            onSubmit()
+                                                        }
+                                                        className="flex-table-form-btn-submit"
+                                                    >
+                                                        Search
+                                                    </Button>
+                                                </Form>
+                                            </>
+                                        }
+                                    >
+                                        <FilterOutlined />
+                                        <Typography>Filters</Typography>
+                                    </Popover>
+                                </div>
+                            </div>
+
+                            <div className="flex-table-action-container">
+                                {props.actionContent}
+                            </div>
                         </div>
-                    </div>
-
-                    <div className="flex-table-action-container">
-                        {props.actionContent}
-                    </div>
-                </div>
+                    </>
+                ) : null}
 
                 <AntdTable
                     {...props}

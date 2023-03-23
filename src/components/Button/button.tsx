@@ -2,7 +2,13 @@ import { Button as AntdButton, ButtonProps as AntdButtonProps } from "antd";
 import "./button.css";
 
 export interface ButtonProps extends AntdButtonProps {
-    mode: "create" | "edit" | "delete" | "comment" | "comment-hollow";
+    mode:
+        | "create"
+        | "edit"
+        | "delete"
+        | "comment"
+        | "comment-hollow"
+        | "borderless";
 }
 
 const Button: React.FC<ButtonProps> = (props) => {

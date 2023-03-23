@@ -5,7 +5,8 @@ import {
 
 export interface DescriptionItemProps {
     label: string;
-    value?: string;
+    value?: string | number | React.ReactNode;
+    span?: number;
 }
 export interface DescriptionsProps extends AntdDescriptionProps {
     items: DescriptionItemProps[];
@@ -17,7 +18,7 @@ const Descriptions: React.FC<DescriptionsProps> = (
     return (
         <AntdDescriptions {...props}>
             {props.items.map((item) => (
-                <AntdDescriptions.Item label={item.label}>
+                <AntdDescriptions.Item label={item.label} span={item.span}>
                     {item.value ? item.value : "-"}
                 </AntdDescriptions.Item>
             ))}

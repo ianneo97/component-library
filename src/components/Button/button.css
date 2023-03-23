@@ -1,10 +1,11 @@
 .lfx-btn {
     border-radius: 34px;
     display: flex;
-    gap: 10px;
     align-items: center;
     font-weight: 400;
     transition: transform 0.2s ease-in-out;
+    justify-content: center;
+    max-width: max-content;
 }
 
 .lfx-create-btn,
@@ -42,6 +43,13 @@
     color: #303f49 !important;
 }
 
+.lfx-borderless-btn,
+.lfx-borderless-btn:hover {
+    background-color: white !important;
+    color: #972d47 !important;
+    box-shadow: none;
+}
+
 .lfx-create-btn:hover,
 .lfx-create-btn:focus,
 .lfx-delete-btn:hover,
@@ -51,6 +59,8 @@
 .lfx-comment-btn:hover,
 .lfx-comment-btn:focus,
 .lfx-comment-hollow-btn:hover,
-.lfx-comment-hollow-btn:focus {
+.lfx-comment-hollow-btn:focus,
+.lfx-borderless-btn:hover,
+.lfx-borderless-btn:focus {
     transform: scale(1.05);
 }

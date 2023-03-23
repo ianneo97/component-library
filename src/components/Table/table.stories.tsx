@@ -1,7 +1,10 @@
 import { Tag } from "antd";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "../Button";
+import { Input } from "../Input";
+import { Modal } from "../Modal";
 import { Link, Typography } from "../Typography";
+import { AddTable } from "./row-table";
 import { Table } from "./table";
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -6981,6 +6984,7 @@ export const TableWithData = () => {
                     <Button mode="create">Hi</Button>
                 </>
             }
+            displaySearch
         />
     );
 };
@@ -6988,3 +6992,61 @@ export const TableWithData = () => {
 export const EmptyTable = () => (
     <Table dataSource={[]} columns={mockColumns} rowKey="id" />
 );
+
+export const AddTableExample = () => {
+    const [data, setData] = useState<any>([]);
+    const columns = [
+        {
+            title: "Material Name",
+            dataIndex: "materialName",
+            width: "30%",
+            editable: true,
+            component: <Input />,
+        },
+        {
+            title: "Description",
+            dataIndex: "description",
+            width: "20%",
+            editable: true,
+        },
+        {
+            title: "Base Materials",
+            dataIndex: "baseMaterials",
+            width: "20%",
+            editable: true,
+        },
+    ];
+
+    return (
+        <Modal
+            title="Add New Material"
+            open
+            width={"700px"}
+            footerChildren={
+                <>
+                    <div style={{ display: "flex" }}>
+                        <Button
+                            mode="comment-hollow"
+                            onClick={() => console.log(data)}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            mode="comment"
+                            onClick={() => console.log(data)}
+                        >
+                            Create
+                        </Button>
+                    </div>
+                </>
+            }
+        >
+            <AddTable
+                columns={columns}
+                data={data}
+                setData={setData}
+                addCardTitle={"New Material"}
+            />
+        </Modal>
+    );
+};

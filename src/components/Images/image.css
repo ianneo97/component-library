@@ -1,0 +1,14 @@
+.lfx-image {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.lfx-image .sub-image-container {
+    display: flex;
+    gap: 7px;
+}
+
+.lfx-image .ant-image-img {
+    border-radius: 7px;
+}

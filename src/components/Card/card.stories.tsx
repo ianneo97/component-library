@@ -1,4 +1,3 @@
-import { Image } from "antd";
 import { Button } from "../Button";
 import { Table } from "../Table";
 import { Typography } from "../Typography";

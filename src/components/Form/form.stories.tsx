@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Button } from "../Button";
-import { Steps } from "../Steps";
-import { StepperModal } from "../Modal";
-import { Select } from "../Select";
-import { Typography } from "../Typography";
-import { Form, FormItem, useForm } from "./form";
 import { Input } from "../Input";
 import { InputNumber } from "../InputNumber";
+import { StepperModal } from "../Modal";
+import { Select } from "../Select";
+import { Steps } from "../Steps";
 import { Switch } from "../Switch";
+import { Typography } from "../Typography";
+import { Form, FormItem, useForm } from "./form";
 
 export default {
     title: "Form",
@@ -27,26 +27,31 @@ export const FormWithSplit = () => {
                 title="Create new product"
                 footer={[
                     <>
-                        {current > 0 ? (
-                            <Button
-                                mode="comment-hollow"
-                                className="prv-btn"
-                                onClick={() => setCurrent(current - 1)}
-                            >
-                                Previous
-                            </Button>
-                        ) : null}
-                        <Button mode="comment-hollow">Cancel</Button>
-                        {current < steps.length - 1 ? (
-                            <Button
-                                mode="comment"
-                                onClick={() => setCurrent(current + 1)}
-                            >
-                                Next
-                            </Button>
-                        ) : (
-                            <Button mode="comment">Submit</Button>
-                        )}
+                        <div>
+                            {current > 0 ? (
+                                <Button
+                                    mode="comment-hollow"
+                                    className="prv-btn"
+                                    onClick={() => setCurrent(current - 1)}
+                                >
+                                    Previous
+                                </Button>
+                            ) : null}
+                        </div>
+
+                        <div style={{ display: "flex" }}>
+                            <Button mode="comment-hollow">Cancel</Button>
+                            {current < steps.length - 1 ? (
+                                <Button
+                                    mode="comment"
+                                    onClick={() => setCurrent(current + 1)}
+                                >
+                                    Next
+                                </Button>
+                            ) : (
+                                <Button mode="comment">Submit</Button>
+                            )}
+                        </div>
                     </>,
                 ]}
                 footerClassName="custom-modal-footer"
