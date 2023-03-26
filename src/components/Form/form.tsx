@@ -11,6 +11,11 @@ export interface FormProps extends AntdFormProps {}
 export interface FormItemProps extends AntdFormItemProps {}
 export interface FormInstance extends AntdFormInstance {}
 
+interface FormListProps {
+    name: string;
+    children: (fields: any, methods: any) => React.ReactNode;
+}
+
 const Form: React.FC<FormProps> = (props) => {
     return (
         <AntdForm
@@ -31,4 +36,8 @@ function useForm() {
     return AntdForm.useForm();
 }
 
-export { Form, FormItem, useForm };
+const FormList: React.FC<FormListProps> = (props) => {
+    return <AntdForm.List {...props}>{props.children}</AntdForm.List>;
+};
+
+export { Form, FormItem, useForm, FormList };

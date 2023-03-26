@@ -20,7 +20,7 @@
 .lfx-modal-footer {
     display: flex;
     padding: 15px;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
 
 .lfx-modal-subtitle {

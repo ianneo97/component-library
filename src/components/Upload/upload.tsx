@@ -1,14 +1,13 @@
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import {
     Upload as AntdUpload,
     UploadFile,
     UploadProps as AntdUploadProps,
 } from "antd";
+import { Typography } from "../Typography";
 import "./upload.css";
 
 export interface UploadProps extends AntdUploadProps {
-    // type?: "text" | "picture" | "picture-card" | "picture-circle";
-    // children?: React.ReactNode;
     showUploadList?: boolean;
     files?: UploadFile<any>[];
     setFiles?: (files: UploadFile<any>[]) => void;
@@ -36,4 +35,49 @@ const Upload: React.FC<UploadProps> = (props) => {
     );
 };
 
-export { Upload };
+const UploadBox: React.FC<UploadProps> = (props) => {
+    return (
+        <AntdUpload.Dragger
+            {...props}
+            accept=".pdf,.jpg,.jpeg,.png"
+            multiple
+            beforeUpload={() => false}
+            onChange={(arg) => {
+                if (!props.setFiles) return;
+
+                props.setFiles(arg.fileList);
+            }}
+        >
+            <div
+                style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    gap: "12px",
+                }}
+            >
+                <UploadOutlined style={{ fontSize: "42px" }} />
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "baseline",
+                    }}
+                >
+                    <Typography style={{ fontSize: "16px" }}>
+                        Select a file or drag it here
+                    </Typography>
+                    <Typography style={{ fontSize: "12px" }}>
+                        Supported file types are PDF, JPG, PNG
+                    </Typography>
+                </div>
+            </div>
+        </AntdUpload.Dragger>
+    );
+};
+
+const UploadLink: React.FC<UploadProps> = (props) => {
+    return <AntdUpload {...props}></AntdUpload>;
+};
+
+export { Upload, UploadBox, UploadLink };

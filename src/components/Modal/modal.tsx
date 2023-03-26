@@ -39,7 +39,7 @@ export const StepperModal: React.FC<StepperModalProps> = (props) => {
         <>
             <AntdModal
                 {...props}
-                width={750}
+                width={props.width ? props.width : "1000px"}
                 className={`lfx-modal ${props.className}`}
                 footer={
                     <div

@@ -1,12 +1,14 @@
 import { Select as AntdSelect, SelectProps as AntdSelectProps } from "antd";
 
-export interface SelectProps extends AntdSelectProps {}
+export interface SelectProps extends AntdSelectProps {
+    width?: number | string;
+}
 
 const Select: React.FC<SelectProps> = (props) => {
     return (
         <AntdSelect
             {...props}
-            style={{ width: "100%" }}
+            style={{ width: props.width ? props.width : "100%" }}
             optionFilterProp={props.showSearch ? "children" : undefined}
             filterOption={
                 props.showSearch
