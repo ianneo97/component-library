@@ -8,6 +8,7 @@ export * from "./Form";
 export * from "./Images";
 export * from "./Input";
 export * from "./InputNumber";
+export * from "./List";
 export * from "./Modal";
 export * from "./Popover";
 export * from "./Progress";
