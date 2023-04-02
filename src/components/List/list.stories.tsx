@@ -184,10 +184,11 @@ export const Default = () => {
         <Card title="Example List">
             <List
                 dataSource={data}
-                viewMoreAction={console.log}
-                viewMoreActionKey={["id", "workspace"]}
+                viewAction={console.log}
+                navigateKey={"id"}
+                navigatePath="/purchase-orders"
                 withViewMore
-                rowKeyId="externalDataId"
+                rowKeyId={["owner", "firstName"]}
             />
         </Card>
     );

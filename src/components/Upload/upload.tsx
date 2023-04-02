@@ -16,6 +16,25 @@ export interface UploadProps extends AntdUploadProps {
 const Upload: React.FC<UploadProps> = (props) => {
     return (
         <AntdUpload
+            showUploadList={false}
+            beforeUpload={() => false}
+            fileList={props.fileList}
+            multiple
+            onChange={(arg) => {
+                if (arg.file.status === "removed") return;
+                if (!props.setFiles) return;
+
+                props.setFiles(arg.fileList);
+            }}
+        >
+            {props.children}
+        </AntdUpload>
+    );
+};
+
+const UploadCard: React.FC<UploadProps> = (props) => {
+    return (
+        <AntdUpload
             {...props}
             multiple={true}
             listType={"picture-card"}
@@ -80,4 +99,4 @@ const UploadLink: React.FC<UploadProps> = (props) => {
     return <AntdUpload {...props}></AntdUpload>;
 };
 
-export { Upload, UploadBox, UploadLink };
+export { Upload, UploadCard, UploadBox, UploadLink };

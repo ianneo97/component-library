@@ -26,18 +26,28 @@ const AddTable: React.FC<AddTableProps> = ({
 }) => {
     const [addMode, setAddMode] = useState(false);
 
+    const handleSelectChange = () => {
+        console.log("select changed");
+    };
+
     const memoizedColumns = useMemo(
         () => [
             ...(columns || []).map((column: any) => ({
                 ...column,
                 render: (text: string, record: any, index: number) => {
+                    console.log(column.component);
+                    const Component = column.component;
                     return (
                         <FormItem
                             label={record.title}
                             name={[index, ...column.dataIndex.split(".")]}
                             key={column.dataIndex}
                         >
-                            {column.component ? column.component : <Input />}
+                            {Component ? (
+                                <Component options={column.options} />
+                            ) : (
+                                <Input />
+                            )}
                         </FormItem>
                     );
                 },
@@ -85,6 +95,7 @@ const AddTable: React.FC<AddTableProps> = ({
                                     className="lfx-add-table"
                                     rowClassName="editable-row"
                                     rowKey={(record) => record.key}
+                                    style={{ minHeight: "800px" }}
                                     scroll={{ x: "max-content" }}
                                 />
                             </>
@@ -101,6 +112,8 @@ const AddTable: React.FC<AddTableProps> = ({
                         {memoizedColumns
                             .filter((column) => column.dataIndex !== "action")
                             .map((column: any) => {
+                                const Component = column.component;
+
                                 return (
                                     <>
                                         <FormItem
@@ -108,8 +121,15 @@ const AddTable: React.FC<AddTableProps> = ({
                                             name={column.dataIndex}
                                             key={column.dataIndex}
                                         >
-                                            {column.component ? (
-                                                column.component
+                                            {Component ? (
+                                                <Component
+                                                    options={
+                                                        column.options || []
+                                                    }
+                                                    onChange={
+                                                        handleSelectChange
+                                                    }
+                                                />
                                             ) : (
                                                 <Input />
                                             )}

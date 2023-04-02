@@ -1,6 +1,5 @@
 import { ArrowRightOutlined } from "@ant-design/icons";
 import { List as AntdList, ListProps as AntdListProps, Typography } from "antd";
-import { Progress } from "../Progress";
 import { Link } from "../Typography";
 import "./list.css";
 
@@ -8,60 +7,80 @@ export interface ListProps extends AntdListProps<any> {
     title?: React.ReactNode;
     decsription?: React.ReactNode;
     withViewMore?: boolean;
-    viewMoreAction: CallableFunction;
-    viewMoreActionKey: string[];
-    rowKeyId: string;
+    viewAction: CallableFunction;
+    navigateKey?: string;
+    navigatePath?: string;
+    rowKeyId?: string[];
+}
+
+function getItemValue(item: any, keys: string[]) {
+    return keys.reduce((obj, key) => obj?.[key], item);
 }
 
 const List: React.FC<ListProps> = (props) => {
-    // console.log(props.rowKeyId);
     return (
         <AntdList
             {...props}
             dataSource={props.dataSource}
             className="lfx-list"
             renderItem={(item, index) => (
-                <AntdList.Item className="lfx-list-item" key={item.id}>
-                    <AntdList.Item.Meta
-                        className="lfx-list-item-meta"
-                        title={
-                            <>
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                    }}
-                                >
-                                    <Typography>
-                                        {item[props.rowKeyId]}
-                                    </Typography>
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "12px",
+                    }}
+                >
+                    <AntdList.Item className="lfx-list-item" key={item.id}>
+                        <AntdList.Item.Meta
+                            className="lfx-list-item-meta"
+                            title={
+                                <>
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                        }}
+                                    >
+                                        <Typography>
+                                            {getItemValue(
+                                                item,
+                                                props?.rowKeyId || []
+                                            )}
+                                        </Typography>
 
-                                    {props.withViewMore ? (
-                                        <>
-                                            <Link
-                                                style={{
-                                                    fontSize: 12,
-                                                    color: "#972D47",
-                                                }}
-                                                onClick={() =>
-                                                    props.viewMoreAction(
-                                                        ...props.viewMoreActionKey.map(
-                                                            (key) => item[key]
+                                        {props.withViewMore ? (
+                                            <>
+                                                <Link
+                                                    style={{
+                                                        fontSize: 12,
+                                                        color: "#972D47",
+                                                    }}
+                                                    onClick={() =>
+                                                        props.viewAction(
+                                                            `${
+                                                                props.navigatePath
+                                                            }/${
+                                                                item[
+                                                                    props.navigateKey ||
+                                                                        ""
+                                                                ]
+                                                            }`
                                                         )
-                                                    )
-                                                }
-                                            >
-                                                View more
-                                                <ArrowRightOutlined />
-                                            </Link>
-                                        </>
-                                    ) : null}
-                                </div>
-                            </>
-                        }
-                        description={<Progress percent={50} />}
-                    ></AntdList.Item.Meta>
-                </AntdList.Item>
+                                                    }
+                                                >
+                                                    View more
+                                                    <ArrowRightOutlined />
+                                                </Link>
+                                            </>
+                                        ) : null}
+                                    </div>
+                                </>
+                            }
+                            description={props.decsription}
+                        ></AntdList.Item.Meta>
+                    </AntdList.Item>
+                </div>
             )}
         ></AntdList>
     );

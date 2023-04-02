@@ -1,13 +1,15 @@
-import { UploadFile } from "antd";
+import { Checkbox, UploadFile } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "../Button";
 import { useForm } from "../Form";
 import { Input } from "../Input";
+import { InputNumber } from "../InputNumber";
 import { Modal } from "../Modal";
 import { Select } from "../Select";
 import { AddTable } from "./add-table/add-table-v2";
 import { Table } from "./table";
 import { UploadAddTable } from "./upload-add-table/upload-add-table";
+import { AddTableV2 } from "./add-table-v2/add-table";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
@@ -79,15 +81,11 @@ export const AddTableVersionTwo = () => {
             dataIndex: "materialName",
             key: "materialName",
             editable: true,
-            component: (
-                <Select
-                    options={[
-                        { label: "TEST", value: "test" },
-                        { label: "TEST@", value: "test2" },
-                    ]}
-                    style={{ width: "100%" }}
-                />
-            ),
+            component: Select,
+            options: [
+                { label: "TEST", value: "test" },
+                { label: "TEST@", value: "test2" },
+            ],
         },
         {
             title: "Description",
@@ -158,6 +156,7 @@ export const UploadAddTableIntegration = () => {
                 dataIndex: "nature",
                 component: (
                     <Select
+                        onDeselect={() => {}}
                         options={[
                             { label: "TEST", value: "AUDIT_REPORTS" },
                             { label: "BILL", value: "BILL_OF_LADING" },
@@ -212,6 +211,53 @@ export const UploadAddTableIntegration = () => {
                 mode="comment"
                 onClick={() => console.log(form.getFieldsValue(true))}
             >
+                Test
+            </Button>
+        </>
+    );
+};
+
+export const AddTableVersion = () => {
+    const columns = [
+        {
+            title: "Material Name",
+            dataIndex: "materialName",
+            component: Select,
+            options: [
+                { label: "TEST", value: "test" },
+                { label: "TEST123", value: "test1" },
+                { label: "TEST@", value: "test2" },
+            ],
+        },
+        {
+            title: "Description",
+            dataIndex: "description",
+            component: InputNumber,
+        },
+        {
+            title: "Base Materials",
+            dataIndex: "baseMaterials",
+        },
+    ];
+
+    const [data, setData] = useState([
+        {
+            materialName: "test",
+            description: "Description",
+            baseMaterials: "Testing123",
+        },
+    ]);
+
+    return (
+        <>
+            <AddTableV2
+                columns={columns}
+                dataSource={data}
+                setDataSource={setData}
+                cardTitle="Add New Material"
+            />
+
+            <Button mode="borderless" onClick={() => console.log(data)}>
                 Test
             </Button>
         </>
