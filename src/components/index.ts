@@ -1,6 +1,7 @@
 export * from "./Autocomplete";
 export * from "./Button";
 export * from "./Card";
+export * from "./Checkbox";
 export * from "./Collapse";
 export * from "./Descriptions";
 export * from "./Drawer";

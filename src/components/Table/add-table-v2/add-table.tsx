@@ -5,16 +5,16 @@ import { Button } from "../../Button";
 import { Card } from "../../Card";
 import { Form, FormItem, useForm } from "../../Form";
 import { Input } from "../../Input";
-import { Modal } from "../../Modal";
 import "./add-table.css";
-import { Select } from "../../Select";
-// import { Modal } from "../../Modal";
+import { Checkbox } from "../../Checkbox";
 
 export interface TableProps<T = any> extends AntdTableProps<T> {
     columns: AntdTableProps<T>["columns"];
     dataSource: T[];
     setDataSource: (data: T[]) => void;
     cardTitle: string;
+    addable?: boolean;
+    deletable?: boolean;
 }
 
 const AddTable: React.FC<TableProps> = (props) => {
@@ -43,36 +43,51 @@ const AddTable: React.FC<TableProps> = (props) => {
         [dataSource, setDataSource]
     );
 
-    const memoizedColumns = useMemo(
-        () => [
+    const handleChange = useCallback(
+        (value: any, index: number, dataIndex: string, component: any) => {
+            if (component === Checkbox) {
+                onChange(value.target.checked, index, dataIndex);
+            } else {
+                onChange(value, index, dataIndex);
+            }
+        },
+        [onChange]
+    );
+
+    const memoizedColumns = useMemo(() => {
+        const columns = [
             ...(props.columns || []).map((x: any) => {
                 return {
                     ...x,
                     render: (text: string, record: any, index: number) => {
                         const Component = x.component;
-                        const filteredOptions = x.options?.filter(
-                            (opt: any) =>
-                                !dataSource.some(
-                                    (arg: any) => arg[x.dataIndex] === opt.value
-                                )
-                        );
+
+                        if (x.hideFn && x.hideFn(record, x.hideParams)) {
+                            return null;
+                        }
 
                         return Component ? (
                             <Component
                                 onChange={(value: any) =>
-                                    onChange(value, index, x.dataIndex)
+                                    handleChange(
+                                        value,
+                                        index,
+                                        x.dataIndex,
+                                        x.component
+                                    )
                                 }
-                                options={filteredOptions}
+                                options={x.options}
                                 value={
                                     x.mode === "tags"
                                         ? record[x.dataIndex]
                                         : record[x.dataIndex]
                                 }
+                                checked={record[x.dataIndex]}
                                 mode={x.mode}
-                                getPopupContainer={(trigger: any) =>
-                                    trigger.parentElement
-                                }
+                                placement="bottomLeft"
                             />
+                        ) : x.disabled ? (
+                            record[x.dataIndex]
                         ) : (
                             <Input
                                 value={record[x.dataIndex]}
@@ -88,7 +103,10 @@ const AddTable: React.FC<TableProps> = (props) => {
                     },
                 };
             }),
-            {
+        ];
+
+        if (props.deletable) {
+            columns.push({
                 title: "Actions",
                 dataIndex: "actions",
                 render: (text: any, data: any, index: number) => {
@@ -98,138 +116,108 @@ const AddTable: React.FC<TableProps> = (props) => {
                         </Button>
                     );
                 },
-            },
-        ],
-        [props.columns, onChange, dataSource]
-    );
+            });
+        }
+
+        return columns;
+    }, [props.columns, onChange, handleChange, props.deletable]);
 
     return (
         <>
-            <Modal open>
-                <AntdTable
-                    {...rest}
-                    dataSource={dataSource}
-                    columns={memoizedColumns}
-                    footer={() => (
-                        <>
-                            <div
-                                style={{
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    gap: "8px",
-                                }}
-                            >
-                                <Button
-                                    mode="borderless"
-                                    onClick={() => setAddMode(true)}
-                                >
-                                    Add New{" "}
-                                </Button>
-                            </div>
-                        </>
-                    )}
-                />
+            <AntdTable
+                {...rest}
+                dataSource={dataSource}
+                columns={memoizedColumns}
+                footer={
+                    !props.addable
+                        ? undefined
+                        : () => (
+                              <>
+                                  <div
+                                      style={{
+                                          display: "flex",
+                                          flexDirection: "row",
+                                          gap: "8px",
+                                      }}
+                                  >
+                                      <Button
+                                          mode="borderless"
+                                          onClick={() => setAddMode(true)}
+                                      >
+                                          Add New{" "}
+                                      </Button>
+                                  </div>
+                              </>
+                          )
+                }
+            />
 
-                {addMode ? (
-                    <>
-                        <Card title={props.cardTitle}>
-                            <Form form={form}>
-                                {memoizedColumns
-                                    .filter(
-                                        (column) =>
-                                            column.dataIndex !== "actions"
-                                    )
-                                    .map((x: any, index) => {
-                                        const Component = x.component;
-                                        const filteredOptions =
-                                            x.options?.filter(
-                                                (opt: any) =>
-                                                    !dataSource.some(
-                                                        (arg: any) =>
-                                                            arg[x.dataIndex] ===
-                                                            opt.value
-                                                    )
-                                            );
+            {addMode && props.addable ? (
+                <>
+                    <Card
+                        title={props.cardTitle}
+                        bodyStyle={{ height: "100%" }}
+                    >
+                        <Form form={form} style={{ overflow: "unset" }}>
+                            {memoizedColumns
+                                .filter(
+                                    (column) => column.dataIndex !== "actions"
+                                )
+                                .map((x: any, index) => {
+                                    const Component = x.component;
+                                    const filteredOptions = x.options?.filter(
+                                        (opt: any) =>
+                                            !dataSource.some(
+                                                (arg: any) =>
+                                                    arg[x.dataIndex] ===
+                                                    opt.value
+                                            )
+                                    );
 
-                                        return (
-                                            <>
-                                                <FormItem
-                                                    label={x.title}
-                                                    name={x.dataIndex}
-                                                    key={x.dataIndex}
-                                                    style={{
-                                                        position: "relative",
-                                                    }}
-                                                >
-                                                    {/* {Component ? (
-                                                        <Component
-                                                            mode={x.mode}
-                                                            options={
-                                                                filteredOptions ||
-                                                                []
-                                                            }
-                                                        />
-                                                    ) : (
-                                                        <Input />
+                                    return (
+                                        <>
+                                            <FormItem
+                                                label={x.title}
+                                                name={x.dataIndex}
+                                                key={x.dataIndex}
+                                            >
+                                                {Component ? (
+                                                    <Component
+                                                        mode={x.mode}
+                                                        options={
+                                                            filteredOptions ||
+                                                            []
+                                                        }
+                                                        placement="bottomLeft"
+                                                        onChange={x.onChange}
+                                                    />
+                                                ) : (
+                                                    <Input />
+                                                )}
+                                            </FormItem>
+                                        </>
+                                    );
+                                })}
+                        </Form>
 
-                                                    )} */}
-                                                    <div
-                                                        style={{
-                                                            position:
-                                                                "relative",
-                                                        }}
-                                                        id={`select-${index}`}
-                                                    ></div>
-                                                </FormItem>
-                                                <Select
-                                                    getPopupContainer={(
-                                                        trigger
-                                                    ) => trigger.parentNode}
-                                                    // getPopupContainer={() =>
-                                                    //     document.getElementById(
-                                                    //         `select-${index}`
-                                                    //     ) ||
-                                                    //     document.body
-                                                    // }
-                                                    options={[
-                                                        {
-                                                            label: "TEST",
-                                                            value: "test",
-                                                        },
-                                                        {
-                                                            label: "TEST123",
-                                                            value: "test1",
-                                                        },
-                                                        {
-                                                            label: "TEST@",
-                                                            value: "test2",
-                                                        },
-                                                    ]}
-                                                />
-                                            </>
-                                        );
-                                    })}
-                            </Form>
+                        <div
+                            style={{
+                                display: "flex",
+                                gap: "8px",
+                                justifyContent: "flex-end",
+                            }}
+                        >
+                            <Button mode="delete" onClick={reset}>
+                                Cancel
+                            </Button>
 
-                            <div
-                                style={{
-                                    display: "flex",
-                                    gap: "8px",
-                                    justifyContent: "flex-end",
-                                }}
-                            >
-                                <Button mode="delete" onClick={reset}>
-                                    Cancel
-                                </Button>
-
-                                <Button mode="create" onClick={submitForm}>
-                                    Submit
-                                </Button>
-                            </div>
-                        </Card>
-                    </>
-                ) : null}
-            </Modal>
+                            <Button mode="create" onClick={submitForm}>
+                                Submit
+                            </Button>
+                        </div>
+                    </Card>
+                </>
+            ) : null}
         </>
     );
 };

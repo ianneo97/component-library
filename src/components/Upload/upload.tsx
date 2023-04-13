@@ -19,6 +19,7 @@ const Upload: React.FC<UploadProps> = (props) => {
             showUploadList={false}
             beforeUpload={() => false}
             fileList={props.fileList}
+            accept=".jpg,.jpeg,.png"
             multiple
             onChange={(arg) => {
                 if (arg.file.status === "removed") return;
@@ -39,6 +40,7 @@ const UploadCard: React.FC<UploadProps> = (props) => {
             multiple={true}
             listType={"picture-card"}
             beforeUpload={() => false}
+            accept=".pdf,.jpg,.jpeg,.png"
             showUploadList={props.showUploadList}
             fileList={props.fileList}
             onChange={(arg) => {
@@ -58,7 +60,7 @@ const UploadBox: React.FC<UploadProps> = (props) => {
     return (
         <AntdUpload.Dragger
             {...props}
-            accept=".pdf,.jpg,.jpeg,.png"
+            accept=".jpg,.jpeg,.png"
             multiple
             beforeUpload={() => false}
             onChange={(arg) => {
@@ -96,7 +98,7 @@ const UploadBox: React.FC<UploadProps> = (props) => {
 };
 
 const UploadLink: React.FC<UploadProps> = (props) => {
-    return <AntdUpload {...props}></AntdUpload>;
+    return <AntdUpload {...props} accept=".jpg,.jpeg,.png"></AntdUpload>;
 };
 
 export { Upload, UploadCard, UploadBox, UploadLink };

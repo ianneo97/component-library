@@ -29,7 +29,11 @@ const Form: React.FC<FormProps> = (props) => {
 };
 
 const FormItem: React.FC<FormItemProps> = (props) => {
-    return <AntdForm.Item {...props}>{props.children}</AntdForm.Item>;
+    return (
+        <AntdForm.Item {...props} style={props.style}>
+            {props.children}
+        </AntdForm.Item>
+    );
 };
 
 function useForm() {
