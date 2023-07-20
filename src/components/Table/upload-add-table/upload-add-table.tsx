@@ -13,6 +13,7 @@ import { UploadBox } from "../../Upload";
 export interface UploadAddTableProps extends AntdTableProps<any> {
     files: UploadFile<any>[];
     form: FormInstance;
+    accept?: string;
     setFiles: (files: UploadFile<any>[]) => void;
 }
 
@@ -25,6 +26,7 @@ export const UploadAddTable: React.FC<UploadAddTableProps> = (args) => {
                     return (
                         <FormItem
                             label={record.title}
+                            valuePropName={column.valuePropName || "value"}
                             name={[
                                 index,
                                 ...(column.dataIndex instanceof Array
@@ -32,6 +34,7 @@ export const UploadAddTable: React.FC<UploadAddTableProps> = (args) => {
                                     : [column.dataIndex]),
                             ]}
                             key={column.dataIndex}
+                            className="upload-table-form-item"
                         >
                             {column.component ? column.component : <Input />}
                         </FormItem>
@@ -83,6 +86,7 @@ export const UploadAddTable: React.FC<UploadAddTableProps> = (args) => {
                     files={args.files}
                     setFiles={args.setFiles}
                     showUploadList={false}
+                    accept={args.accept}
                 />
 
                 <Form form={args.form}>

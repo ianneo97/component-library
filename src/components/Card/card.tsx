@@ -7,7 +7,7 @@ export interface CardProps extends AntdCardProps {}
 export interface InfoCardProps extends AntdCardProps {
     icon?: string;
     showIcon?: boolean;
-    infoTitle?: string;
+    infoTitle?: string | React.ReactNode;
     information?: React.ReactNode;
     extras?: React.ReactNode;
     tags?: string[];

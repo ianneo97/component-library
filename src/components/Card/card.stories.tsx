@@ -64,7 +64,7 @@ export const InfoExample = () => {
             icon={
                 "https://images.getrecipekit.com/20210919052613-breakfast-toast-topper-1030x687.jpg?width=650&quality=90&"
             }
-            infoTitle="LFX Digital"
+            infoTitle={<div>Hello world</div>}
             information={
                 <>
                     <Typography>Supplier Code: LFX-HK-DIV-0001</Typography>

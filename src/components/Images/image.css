@@ -4,11 +4,18 @@
     gap: 12px;
 }
 
+.lfx-image .main-image-container {
+    flex: 0.8;
+}
+
 .lfx-image .sub-image-container {
     display: flex;
     gap: 7px;
+    flex: 0.2;
 }
 
 .lfx-image .ant-image-img {
     border-radius: 7px;
+    object-fit: fill;
+    height: 100%;
 }

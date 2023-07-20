@@ -24,7 +24,7 @@ export interface TableProps<T = any> extends AntdTableProps<T> {
 const Table: React.FC<TableProps> = (props) => {
     const [form] = Form.useForm();
     const [filterValue, setFilterValue] = useState<string>("");
-    const [filteredData, setFilteredData] = useState(props.dataSource);
+    const [filteredData, setFilteredData] = useState<any>([]);
     const [filteredCols, setFilteredCols] = useState(props.columns);
     const [checked, setChecked] = useState(true);
     const [selectedCheckboxes, setSelectedCheckboxes] = useState<
@@ -33,19 +33,19 @@ const Table: React.FC<TableProps> = (props) => {
 
     const columns = useMemo(
         () => props.columns?.filter((x) => x.title !== "Actions") || [],
-        // () => props.columns || [],
         [props.columns]
     );
 
-    const conditions = [
-        { label: "Contains", value: "contains" },
-        { label: "Equals", value: "equals" },
-    ];
+    const conditions = [{ label: "Contains", value: "contains" }];
+    const columnsWithoutActions = useMemo(
+        () => columns.filter((x) => x.title !== "Actions"),
+        [columns]
+    );
 
     const onSearch = useCallback(() => {
         const content = props.dataSource?.filter((item) =>
             Object.values(item).some((value) =>
-                JSON.stringify(value)
+                JSON.stringify(value || "")
                     .toLocaleLowerCase()
                     .includes(filterValue.toLocaleLowerCase())
             )
@@ -53,6 +53,12 @@ const Table: React.FC<TableProps> = (props) => {
 
         setFilteredData(content);
     }, [filterValue, props.dataSource]);
+
+    const onClear = useCallback(() => {
+        form.resetFields();
+        setFilteredData(props.dataSource);
+        setFilterValue("");
+    }, [props.dataSource, form]);
 
     const onSubmit = async () => {
         await form.validateFields();
@@ -97,34 +103,45 @@ const Table: React.FC<TableProps> = (props) => {
         setSelectedCheckboxes(list);
         setChecked(list.length === columns.length);
         setFilteredCols(
-            props.columns?.filter((x) => {
-                if (x.title?.toString() === "Actions") return true;
+            list.length > 0
+                ? props.columns?.filter((x) => {
+                      if (x.title?.toString() === "Actions") return true;
 
-                return list.includes(x.title?.toString() || "");
-            })
+                      return list.includes(x.title?.toString() || "");
+                  })
+                : props.columns
         );
     };
 
     const onCheckAll = (e: CheckboxChangeEvent) => {
         setChecked(e.target.checked);
+
         setSelectedCheckboxes(
             e.target.checked
-                ? columns.map((x) => x.title?.toString() || "")
+                ? columnsWithoutActions.map((x) => x.title?.toString() || "")
                 : []
         );
-        setFilteredCols(
-            e.target.checked
-                ? props.columns
-                : props.columns?.filter(
-                      (x) => x.title?.toString() === "Actions"
-                  )
-        );
+        setFilteredCols(e.target.checked ? columnsWithoutActions : columns);
     };
 
     useEffect(() => {
         setFilteredCols(props.columns);
         setFilteredData(props.dataSource);
     }, [props.columns, props.dataSource]);
+
+    useEffect(() => {
+        if (selectedCheckboxes.length === 0) {
+            setFilteredData([]);
+        }
+
+        if (
+            selectedCheckboxes.length === columns.length ||
+            selectedCheckboxes.length > 0
+        ) {
+            onSearch();
+            // setFilteredData(props.dataSource);
+        }
+    }, [selectedCheckboxes, columns, onSearch]);
 
     return (
         <>
@@ -256,15 +273,34 @@ const Table: React.FC<TableProps> = (props) => {
                                                         />
                                                     </Form.Item>
 
-                                                    <Button
-                                                        mode="create"
-                                                        onClick={() =>
-                                                            onSubmit()
-                                                        }
-                                                        className="flex-table-form-btn-submit"
+                                                    <div
+                                                        style={{
+                                                            display: "flex",
+                                                            justifyContent:
+                                                                "right",
+                                                            gap: "12px",
+                                                        }}
                                                     >
-                                                        Search
-                                                    </Button>
+                                                        <Button
+                                                            mode="create"
+                                                            onClick={() =>
+                                                                onClear()
+                                                            }
+                                                            className="flex-table-form-btn-submit"
+                                                        >
+                                                            Clear
+                                                        </Button>
+
+                                                        <Button
+                                                            mode="create"
+                                                            onClick={() =>
+                                                                onSubmit()
+                                                            }
+                                                            className="flex-table-form-btn-submit"
+                                                        >
+                                                            Search
+                                                        </Button>
+                                                    </div>
                                                 </Form>
                                             </>
                                         }

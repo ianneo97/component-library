@@ -187,7 +187,7 @@ export const Default = () => {
                 viewAction={console.log}
                 navigateKey={"id"}
                 navigatePath="/purchase-orders"
-                withViewMore
+                // withViewMore
                 rowKeyId={["owner", "firstName"]}
             />
         </Card>

@@ -1,0 +1,33 @@
+.custom-table-checkbox .ant-checkbox-wrapper {
+    margin-inline-start: 0px;
+}
+
+.custom-table-checkbox {
+    gap: 2px;
+}
+
+.custom-table-filter {
+    display: flex;
+    gap: 5px;
+    color: #972d47;
+}
+
+.custom-table-filter > .ant-typography {
+    color: #972d47;
+    font-weight: bold;
+}
+
+.custom-table-search .ant-input-group-addon {
+    background: #303f49;
+    color: #fff;
+}
+
+.custom-table .ant-table-thead > tr > th {
+    color: #ffffff;
+    background-color: #303f49;
+    border-right: 0;
+}
+
+.custom-table .ant-table-thead .ant-table-cell::before {
+    display: none;
+}

@@ -1,17 +1,16 @@
 import { UploadFile } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "../Button";
-import { Form, FormItem, useForm } from "../Form";
+// import { Checkbox } from "../Checkbox";
+import { Checkbox } from "../Checkbox";
+import { FormItem, useForm } from "../Form";
 import { Input } from "../Input";
-import { InputNumber } from "../InputNumber";
 import { Modal } from "../Modal";
 import { Select } from "../Select";
-import { AddTable } from "./add-table/add-table-v2";
+import { Link } from "../Typography";
+import { AddTableV2 } from "./add-table-v2/add-table";
 import { Table } from "./table";
 import { UploadAddTable } from "./upload-add-table/upload-add-table";
-import { AddTableV2 } from "./add-table-v2/add-table";
-import { FormList } from "../Form/form";
-import { Checkbox } from "../Checkbox";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
@@ -295,36 +294,45 @@ export const AddTableExample = () => {
         },
     ];
 
+    function getRandomInt(min: number, max: number) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    useEffect(() => {
+        console.log(data);
+    }, [data]);
+
     return (
-        <Modal
-            title="Add New Material"
-            open
-            width={"700px"}
-            footerChildren={
-                <>
-                    <div style={{ display: "flex" }}>
-                        <Button
-                            mode="comment-hollow"
-                            onClick={() => console.log(data)}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            mode="comment"
-                            onClick={() => console.log(data)}
-                        >
-                            Create
-                        </Button>
-                    </div>
-                </>
-            }
-        ></Modal>
+        <>
+            <Button
+                mode="create"
+                onClick={() =>
+                    setData([
+                        ...data,
+                        {
+                            // materialName: "test" + getRandomInt(1, 100),
+                            materialName: undefined,
+                            description: "test",
+                            baseMaterials: "test",
+                        },
+                    ])
+                }
+            >
+                Add Row
+            </Button>
+            <Table
+                displaySearch
+                dataSource={data}
+                columns={columns}
+                key="material"
+            />
+        </>
     );
 };
 
 export const AddTableVersionTwo = () => {
-    const [form] = useForm();
-    const [cardForm] = useForm();
     const columns = [
         {
             title: "Material Name",
@@ -349,49 +357,22 @@ export const AddTableVersionTwo = () => {
             key: "baseMaterials",
             editable: true,
         },
+        {
+            title: "Actions",
+            dataIndex: "actions",
+            render: (text: any, record: any) => <Link>Hello</Link>,
+        },
     ];
 
-    return (
-        <Modal
-            title="Add New Material"
-            open
-            width={"700px"}
-            footerChildren={
-                <>
-                    <div style={{ display: "flex" }}>
-                        <Button
-                            key="cancel-btn"
-                            mode="comment-hollow"
-                            onClick={() =>
-                                cardForm.setFieldsValue({
-                                    baseMaterials: "TEST",
-                                })
-                            }
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            key="add-btn"
-                            mode="comment"
-                            onClick={() =>
-                                console.log(form.getFieldsValue(true))
-                            }
-                        >
-                            Create
-                        </Button>
-                    </div>
-                </>
-            }
-        >
-            <AddTable
-                form={form}
-                cardForm={cardForm}
-                columns={columns}
-                cardTitle="Add New Material"
-                addButtonText="Add Material"
-            />
-        </Modal>
-    );
+    const data = [
+        {
+            materialName: "test",
+            description: "test",
+            baseMaterials: "test",
+        },
+    ];
+
+    return <Table columns={columns} dataSource={data} displaySearch />;
 };
 
 export const UploadAddTableIntegration = () => {
@@ -401,6 +382,12 @@ export const UploadAddTableIntegration = () => {
         () => [
             { title: "Document Name", dataIndex: ["file", "assetName"] },
             { title: "Comment", dataIndex: "comment" },
+            {
+                title: "Private",
+                dataIndex: "isPrivate",
+                valuePropName: "checked",
+                component: <Checkbox />,
+            },
             {
                 title: "Type",
                 dataIndex: "nature",
@@ -440,6 +427,7 @@ export const UploadAddTableIntegration = () => {
                     autoResign: false,
                 },
                 comment: "stupid comment",
+                isPrivate: true,
             };
 
             newItems.push(record);
@@ -455,7 +443,12 @@ export const UploadAddTableIntegration = () => {
                 setFiles={onUploadFile}
                 form={form}
                 columns={columns}
+                accept="*"
             />
+
+            <FormItem>
+                <Checkbox checked={true} indeterminate={false} />
+            </FormItem>
 
             <Button
                 mode="comment"
@@ -472,27 +465,34 @@ export const AddTableVersion = () => {
         {
             title: "Document Type",
             dataIndex: "document",
-            component: Select,
+            component: Input,
+            required: true,
+            rules: [
+                { required: true, message: "Please select a document type" },
+            ],
+            // component: Select,
             // options: Object.values(SupportDocType).map((x) => ({
             //     label: x,
             //     value: x,
             //     key: x,
             // })),
-            options: [
-                { label: "TEST", value: "test1" },
-                { label: "TEST1", value: "test2" },
-            ],
+            // required: true
         },
         {
             title: "Applies To",
             dataIndex: "appliesTo",
-            component: Select,
-            options: Object.values(SupplyChainNodeType).map((x) => ({
-                label: x,
-                value: x,
-                key: x,
-            })),
-            mode: "tags",
+            component: Input,
+            // options: Object.values(SupplyChainNodeType).map((x) => ({
+            //     label: x,
+            //     value: x,
+            //     key: x,
+            // })),
+            required: false,
+            rules: [
+                // { required: true, message: "Please select a document type" },
+            ],
+            skipFilter: true,
+            // mode: "tags",
         },
     ];
 

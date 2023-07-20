@@ -51,16 +51,10 @@
 }
 
 .lfx-create-btn:hover,
-.lfx-create-btn:focus,
 .lfx-delete-btn:hover,
-.lfx-delete-btn:focus,
 .lfx-edit-btn:hover,
-.lfx-edit-btn:focus,
 .lfx-comment-btn:hover,
-.lfx-comment-btn:focus,
 .lfx-comment-hollow-btn:hover,
-.lfx-comment-hollow-btn:focus,
-.lfx-borderless-btn:hover,
-.lfx-borderless-btn:focus {
+.lfx-borderless-btn:hover {
     transform: scale(1.05);
 }

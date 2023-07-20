@@ -4,6 +4,7 @@ import "./image.css";
 export interface ImageProps extends AntdImageProps {}
 export interface GalleryProps {
     images?: string[];
+    fallbackImage?: string;
     mainImageWidth?: number;
 }
 
@@ -17,19 +18,26 @@ const Gallery: React.FC<GalleryProps> = (props) => {
             <div className="lfx-image">
                 <div className="main-image-container">
                     <Image
-                        src={props?.images?.[0] || ""}
+                        src={props?.images?.[0] || props.fallbackImage}
                         width={
                             props.mainImageWidth
                                 ? props.mainImageWidth + 20
                                 : 220
                         }
+                        height={"100%"}
                     />
                 </div>
 
                 <div className="sub-image-container">
-                    {props.images?.map((x) => (
+                    {Array.from({ length: 4 }).map((_, index) => (
                         <Image
-                            src={x}
+                            key={index + 1}
+                            src={
+                                props.images?.[index + 1] || props.fallbackImage
+                            }
+                            preview={props.images?.[index + 1] ? true : false}
+                            loading="lazy"
+                            placeholder
                             width={
                                 props.mainImageWidth
                                     ? props.mainImageWidth / 4

@@ -21,17 +21,29 @@ const AddTable: React.FC<TableProps> = (props) => {
     const { columns, dataSource, setDataSource, ...rest } = props;
     const [form] = useForm();
     const [addMode, setAddMode] = useState(false);
+    const defaultRules = [
+        {
+            required: true,
+            message: "This field is required",
+        },
+    ];
 
     const reset = () => {
         form.resetFields();
         setAddMode(false);
     };
 
-    const submitForm = () => {
-        const values = form.getFieldsValue(true);
-        setDataSource([...dataSource, values]);
+    const submitForm = async () => {
+        try {
+            await form.validateFields();
 
-        reset();
+            const values = form.getFieldsValue(true);
+            setDataSource([...dataSource, values]);
+
+            reset();
+        } catch (error) {
+            return;
+        }
     };
 
     const onChange = useCallback(
@@ -180,13 +192,26 @@ const AddTable: React.FC<TableProps> = (props) => {
                                                 label={x.title}
                                                 name={x.dataIndex}
                                                 key={x.dataIndex}
+                                                required={x.required ?? true}
+                                                rules={
+                                                    x.required
+                                                        ? [
+                                                              ...defaultRules,
+                                                              ...(x.rules ||
+                                                                  []),
+                                                          ]
+                                                        : [...x.rules]
+                                                }
                                             >
                                                 {Component ? (
                                                     <Component
                                                         mode={x.mode}
                                                         options={
-                                                            filteredOptions ||
-                                                            []
+                                                            x.skipFilter
+                                                                ? x.options
+                                                                : filteredOptions
+                                                            // filteredOptions ||
+                                                            // []
                                                         }
                                                         placement="bottomLeft"
                                                         onChange={x.onChange}
